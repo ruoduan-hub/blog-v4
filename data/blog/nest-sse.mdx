@@ -135,12 +135,12 @@ export class LocationtController {
 ```
 
 打开客户端，链接 SSE 一开始一开始我们接受到的是`[]`, 请求下 post请求 传递一个 
-`
+```
 {
     "x": 2,
     "y": 2
 }
-`
+```
 我们会发现数据是这样子的 👇🏻 ：
 
 ![image.png](https://s2.loli.net/2023/07/26/8hPGJHTCK4oQrL1.png)
@@ -150,7 +150,7 @@ export class LocationtController {
 ![image.png](https://s2.loli.net/2023/07/26/gQq276tAEovuNMc.png)
 
 
-数据 从 [] => [{"x":2,"y":2}]
+数据 从 [] => [&#123;"x":2,"y":2&#125;]
 
 但是主要为什么 SSE 请求那么多，而且每次都是 `ID: 1` ？
 

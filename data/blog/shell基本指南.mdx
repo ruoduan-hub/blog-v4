@@ -157,8 +157,7 @@ Shell 传递参数实例！
 
 arr.sh
 
-```bash
-my_array=(A B "C" D)
+```bash my_array="(A" B "C" D)
 
 array_name[0]=value0
 array_name[1]=value1
@@ -196,8 +195,7 @@ value0[1]
 
 > 原生 bash 不支持简单的数学运算，但是可以通过其他命令来实现，例如 awk 和 expr，expr 最常用。
 
-```bash
-val=`expr 3 + 3`
+```bash val="`expr" 3 + 3`
 echo "两数之和为 : $val"
 ```
 
@@ -205,23 +203,16 @@ echo "两数之和为 : $val"
 
 算术运算
 
-```bash
-a=30
-b=60
-
-val=`expr $a + $b`
+```bash a="30" b="60"
+ val="`expr" $a + $b`
 echo "a + b : $val"
-
-val=`expr $a - $b`
+ val="`expr" $a - $b`
 echo "a - b : $val"
-
-val=`expr $a \* $b`
+ val="`expr" $a \* $b`
 echo "a * b : $val"
-
-val=`expr $b / $a`
+ val="`expr" $b / $a`
 echo "b / a : $val"
-
-val=`expr $b % $a`
+ val="`expr" $b % $a`
 echo "b % a : $val"
 
 if [ $a == $b ]
@@ -330,9 +321,7 @@ shell 中流程控制以`if`开始`fi`结尾
 - if else
   if else 语句经常与 test 命令结合
 
-```bash
-num1=$[2*3]
-num2=$[1+5]
+```bash num1="$[2*3]" num2="$[1+5]"
 if test $[num1] -eq $[num2]
 then
     echo '两个数字相等!'
@@ -359,8 +348,7 @@ The value is 5
 
 - while 语句
 
-```bash
-int=1
+```bash int="1"
 while(( $int<=6 ))
 do
     echo $int
@@ -398,7 +386,7 @@ or
 until [ ! $a -lt 10 ]
 do
    echo $a
-   a=`expr $a + 1`
+   a="`expr" $a + 1`
 done
 ```
 
@@ -499,7 +487,7 @@ err：第十个参数为 10 !
 作为一个字符串输出所有参数 1 2 3 4 5 6 7 8 9 66 99 !
 ```
 
-**_当 n>=10 时，需要使用\${n}来获取参数_**
+**_当 n>=10 时，需要使用\$&#123;n&#125;来获取参数_**
 
 - 参数符
 

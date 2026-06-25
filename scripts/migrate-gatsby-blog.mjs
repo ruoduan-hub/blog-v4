@@ -38,6 +38,62 @@ function createSummary(body) {
     .slice(0, 160)
 }
 
+function escapeMdxText(value) {
+  const allowedHtmlTags = new Set([
+    'a',
+    'audio',
+    'br',
+    'details',
+    'font',
+    'iframe',
+    'img',
+    'mark',
+    'source',
+    'strong',
+    'summary',
+    'video',
+  ])
+
+  return value
+    .replace(/<\/?([A-Za-z][A-Za-z0-9-]*)(?=[\s/>])/g, (match, tag) => {
+      return allowedHtmlTags.has(String(tag).toLowerCase()) ? match : match.replace('<', '&lt;')
+    })
+    .replace(
+      /<(?!\/?(?:a|audio|br|details|font|iframe|img|mark|source|strong|summary|video)(?=[\s/>]))/gi,
+      '&lt;'
+    )
+    .replace(/{/g, '&#123;')
+    .replace(/}/g, '&#125;')
+}
+
+function escapeMdxTextOutsideInlineCode(line) {
+  return line
+    .split(/(`+[^`]*`+)/g)
+    .map((part) => (part.startsWith('`') ? part : escapeMdxText(part)))
+    .join('')
+}
+
+function escapeMdxInMarkdownText(body) {
+  const lines = body.split('\n')
+  let inCodeFence = false
+
+  return lines
+    .map((line) => {
+      if (/^\s*(```|~~~)/.test(line)) {
+        inCodeFence = !inCodeFence
+        return line
+      }
+
+      if (inCodeFence) return line
+      return escapeMdxTextOutsideInlineCode(line)
+    })
+    .join('\n')
+}
+
+function normalizeLooseCodeBlocks(body) {
+  return body.replace(/(^|\n)`\n([\s\S]*?)\n`(?=\n|$)/g, '$1```\n$2\n```')
+}
+
 export function normalizeFrontmatter(frontmatter, raw = '', body = '') {
   const summary = frontmatter.description || frontmatter.summary || createSummary(body)
 
@@ -53,13 +109,18 @@ export function normalizeFrontmatter(frontmatter, raw = '', body = '') {
 }
 
 export function toMdxSafeBody(body) {
-  return body
+  const safeHtmlBody = normalizeLooseCodeBlocks(body)
     .replace(/<br>/g, '<br />')
+    .replace(/\sstyle=["']\s*zoom:\s*([0-9.]+)%\s*;?\s*["']/g, ' data-zoom="$1"')
+    .replace(/\s(width|height)=([0-9]+)(?=[\s>])/g, ' $1="$2"')
+    .replace(/\s([A-Za-z][\w:-]*)=([^\s"'>{}]+)(?=[\s>])/g, ' $1="$2"')
     .replace(/frameborder=/g, 'frameBorder=')
     .replace(/allowfullscreen=/g, 'allowFullScreen=')
     .replace(/\smarginwidth="[^"]*"/g, '')
     .replace(/\smarginheight="[^"]*"/g, '')
     .replace(/src="\/\//g, 'src="https://')
+
+  return escapeMdxInMarkdownText(safeHtmlBody)
 }
 
 function isRemoteAsset(assetPath) {

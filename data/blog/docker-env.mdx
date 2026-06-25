@@ -23,17 +23,17 @@ authors:
 
 解决方案：👇🏻
 
-1. `docker run -e TZ=Asia/Shanghai xxxx`
+1. `docker run -e TZ="Asia/Shanghai" xxxx`
 2. 设置 `Dockerfile` 的 ENV
 
 ```dockerfile
 FROM node:18.15.0
 
 # 设置时区
-ENV TZ=Asia/Shanghai
+ENV TZ="Asia/Shanghai"
 
 # 设置主机名
-ENV HOSTNAME=my-container
+ENV HOSTNAME="my-container"
 
 WORKDIR /app
 

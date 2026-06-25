@@ -50,25 +50,25 @@ authors:
 > > 利用Set结构一行解决
 >
 > ```typescript
-> function containsDuplicate(nums: number[]): boolean {
->     const setNums: Array<any> = [...new Set(nums)]
+> function containsDuplicate(nums: number[]): boolean &#123;
+>     const setNums: Array&lt;any> = [...new Set(nums)]
 >     return setNums.length !== nums.length
-> };
+> &#125;;
 > ```
 >
 > #### 方法2：优化版暴力解法
 >
 > ```typescript
-> function containsDuplicate(nums: number[]): boolean {
->     let newArr: Array<any> = [...nums]
+> function containsDuplicate(nums: number[]): boolean &#123;
+>     let newArr: Array&lt;any> = [...nums]
 >     let res: boolean = false
->     for(let i = 0; i <nums.length; i++){
+>     for(let i = 0; i &lt;nums.length; i++)&#123;
 >         const item: any = newArr.splice(0, 1)[0]
 >         res = newArr.includes(item)
 >         if(res)break
->     }
+>     &#125;
 >     return res
-> };
+> &#125;;
 > 
 > ```
 >
@@ -105,20 +105,20 @@ authors:
 > #### 方法1：动态规划
 >
 > ```typescript
-> function maxSubArray(nums: number[]): number {
+> function maxSubArray(nums: number[]): number &#123;
 >     let sum = 0;
 >     let ans = nums[0]
->     for(const num of nums) {
->         if(sum > 0) {
+>     for(const num of nums) &#123;
+>         if(sum > 0) &#123;
 >             sum += num
->         } else {
+>         &#125; else &#123;
 >             sum = num
->         }
+>         &#125;
 >         ans = Math.max(ans, sum)
 > 
->     }
+>     &#125;
 >     return ans
-> };
+> &#125;;
 > ```
 >
 > ---
@@ -159,15 +159,15 @@ authors:
 > > 2 个 for 循环直接暴力解法
 >
 > ```typescript
->   function twoSum(nums: number[], target: number): number[] {
->       for (let i = 0; i < nums.length - 1; i++) {
->           for (let j = i + 1; j < nums.length; j++) {
->               if (target === nums[j] + nums[i]) {
+>   function twoSum(nums: number[], target: number): number[] &#123;
+>       for (let i = 0; i &lt; nums.length - 1; i++) &#123;
+>           for (let j = i + 1; j &lt; nums.length; j++) &#123;
+>               if (target === nums[j] + nums[i]) &#123;
 >                   return [i, j];
->               }
->           }
->       }
->   }
+>               &#125;
+>           &#125;
+>       &#125;
+>   &#125;
 > ```
 >
 >
@@ -179,19 +179,19 @@ authors:
 >
 >  ```typescript
 >  
->  function twoSum(nums: number[], target: number): number[] {
->     let map = new Map<number, number>()
->     for (let i = 0; i < nums.length; i++) {
->        if(map.has(target - nums[i])){
+>  function twoSum(nums: number[], target: number): number[] &#123;
+>     let map = new Map&lt;number, number>()
+>     for (let i = 0; i &lt; nums.length; i++) &#123;
+>        if(map.has(target - nums[i]))&#123;
 >            // 返回建立的哈希表的下标的值，和当前的下标
 >            return [map.get(target - nums[i]), i];
->        } else {
+>        &#125; else &#123;
 >            // 储存值为 key 下标为 index
 >            map.set(nums[i], i);
->        }
->     }
+>        &#125;
+>     &#125;
 >     return []
-> }
+> &#125;
 > 
 >  ```
 >
@@ -220,10 +220,10 @@ authors:
 > > 直接使用 API
 >
 > ```typescript
-> function merge(nums1: number[], m: number, nums2: number[], n: number): void {
+> function merge(nums1: number[], m: number, nums2: number[], n: number): void &#123;
 >     nums1.splice(m, nums1.length - m, ...nums2);
 >     nums1.sort((a, b) => a - b);
-> };
+> &#125;;
 > ```
 >
 >
@@ -240,7 +240,7 @@ authors:
 > /**
 >  Do not return anything, modify nums1 in-place instead.
 >  */
-> function merge(nums1: number[], m: number, nums2: number[], n: number): void {
+> function merge(nums1: number[], m: number, nums2: number[], n: number): void &#123;
 >    // 定义2个从0 开始的指针，分别用来遍历 nums1 和 nums2
 >    let p1 = 0, p2 = 0;
 >    // 空数组储存排序后的值
@@ -249,23 +249,23 @@ authors:
 >     var cur: number;
 >     
 >     // 开始遍历2个数组
->     while (p1 < m || p2 < n) {
->         if (p1 === m) {
+>     while (p1 &lt; m || p2 &lt; n) &#123;
+>         if (p1 === m) &#123;
 >             cur = nums2[p2++];
->         } else if (p2 === n) {
+>         &#125; else if (p2 === n) &#123;
 >             cur = nums1[p1++];
->         } else if (nums1[p1] < nums2[p2]) {
+>         &#125; else if (nums1[p1] &lt; nums2[p2]) &#123;
 >             cur = nums1[p1++];
->         } else {
+>         &#125; else &#123;
 >             cur = nums2[p2++];
->         }
+>         &#125;
 > 
 >         sorted[p1 + p2 - 1] = cur;
->     }
->     for (let i = 0; i != m + n; ++i) {
+>     &#125;
+>     for (let i = 0; i != m + n; ++i) &#123;
 >         nums1[i] = sorted[i];
->     }
-> };
+>     &#125;
+> &#125;;
 > ```
 >
 >
@@ -278,7 +278,7 @@ authors:
 > /**
 >  Do not return anything, modify nums1 in-place instead.
 >  */
-> function merge(nums1: number[], m: number, nums2: number[], n: number): void {
+> function merge(nums1: number[], m: number, nums2: number[], n: number): void &#123;
 >     // 指针从尾部开始
 >     let p1 = m - 1
 >     let p2 = n - 1
@@ -287,19 +287,19 @@ authors:
 >     // 当次排序的值
 >     let cur: number;
 > 
->     while (p1 >= 0 || p2 >= 0) {
->         if (p1 === -1) {
+>     while (p1 >= 0 || p2 >= 0) &#123;
+>         if (p1 === -1) &#123;
 >             cur = nums2[p2--];
->         } else if (p2 === -1) {
+>         &#125; else if (p2 === -1) &#123;
 >             cur = nums1[p1--];
->         } else if (nums1[p1] > nums2[p2]) {
+>         &#125; else if (nums1[p1] > nums2[p2]) &#123;
 >             cur = nums1[p1--];
->         } else {
+>         &#125; else &#123;
 >             cur = nums2[p2--];
->         }
+>         &#125;
 >         nums1[tail--] = cur;
->     }
-> };
+>     &#125;
+> &#125;;
 > 
 > ```
 >

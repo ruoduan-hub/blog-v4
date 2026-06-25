@@ -49,7 +49,7 @@ export default connect((state) => {
 ```
 > 给传进来的`onRef`绑定上自己的方法h2
 
-- 直接这样写的话 是不行🙅的因为`ref`被`Hoc` 高阶组件{connect} "隔离了" 
+- 直接这样写的话 是不行🙅的因为`ref`被`Hoc` 高阶组件&#123;connect&#125; "隔离了" 
 
 - Error
 `Unhandled Rejection (Invariant Violation): You must pass a component to the function returned by connect. Instead received {}`
@@ -133,7 +133,7 @@ export default forwardRef((props, ref) => <Tc {...props} refInstance={ref} />);
 如果 mapDispatchToProps 是一个函数，它可以传入dispatch,ownProps, 定义UI组件如何发出 action，实际上就是要调用 dispatch 这个方法
 
 - [mergeProps(stateProps, dispatchProps, ownProps): props] (Function)
-> 如果指定了这个参数，mapStateToProps() 与 mapDispatchToProps() 的执行结果和组件自身的 props 将传入到这个回调函数中。该回调函数返回的对象将作为 props 传递到被包装的组件中。你也许可以用这个回调函数，根据组件的 props 来筛选部分的 state 数据，或者把 props 中的某个特定变量与 action creator 绑定在一起。如果你省略这个参数，默认情况下返回 Object.assign({}, ownProps, stateProps, dispatchProps) 的结果。
+> 如果指定了这个参数，mapStateToProps() 与 mapDispatchToProps() 的执行结果和组件自身的 props 将传入到这个回调函数中。该回调函数返回的对象将作为 props 传递到被包装的组件中。你也许可以用这个回调函数，根据组件的 props 来筛选部分的 state 数据，或者把 props 中的某个特定变量与 action creator 绑定在一起。如果你省略这个参数，默认情况下返回 Object.assign(&#123;&#125;, ownProps, stateProps, dispatchProps) 的结果。
 
 - [options] (Object)
 > 如果指定这个参数，可以定制 connector 的行为。

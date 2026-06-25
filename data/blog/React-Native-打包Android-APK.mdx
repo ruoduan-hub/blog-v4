@@ -35,11 +35,7 @@ keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg
 
 - 修改 android/gradle.properties 文件，增加如下
 
-```shell
-MYAPP_RELEASE_STORE_FILE=my-release-key.keystore
-MYAPP_RELEASE_KEY_ALIAS=my-key-alias
-MYAPP_RELEASE_STORE_PASSWORD=xx
-MYAPP_RELEASE_KEY_PASSWORD=xx
+```shell MYAPP_RELEASE_STORE_FILE="my-release-key.keystore" MYAPP_RELEASE_KEY_ALIAS="my-key-alias" MYAPP_RELEASE_STORE_PASSWORD="xx" MYAPP_RELEASE_KEY_PASSWORD="xx"
 [注意替换xx为你自己设置的密钥和存储密码]
 ```
 

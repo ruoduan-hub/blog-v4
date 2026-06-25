@@ -63,7 +63,7 @@ authors:
 
 ![外传对象](/static/blog/VUE-components-data/data1.gif)
 
-- 现在把 dataObj 注释， return {count:0}
+- 现在把 dataObj 注释， return &#123;count:0&#125;
 
 ```js
 //var dataObj={count:0}
@@ -88,4 +88,4 @@ Vue.component("counter", {
 
 ​ ![3后](/static/blog/VUE-components-data/22.png)
 
-> 不难看出，这里的关键点就在于 return {} 这个地方 如果是作用域外传入对象的话，上面三个组件的 click 方法都是处理的这个外部对象里面的 count，所以他们作用于同样一个变量，但是如果是 return {count : 0}的话是写在 template 内部的，所以每当你在 page 上渲染一个组件就会响应的创建一个 count ，所以他们互不干预，在事件使用中我们可以根据这个小小的点实现不同需求的功能而省去多余的代码
+> 不难看出，这里的关键点就在于 return &#123;&#125; 这个地方 如果是作用域外传入对象的话，上面三个组件的 click 方法都是处理的这个外部对象里面的 count，所以他们作用于同样一个变量，但是如果是 return &#123;count : 0&#125;的话是写在 template 内部的，所以每当你在 page 上渲染一个组件就会响应的创建一个 count ，所以他们互不干预，在事件使用中我们可以根据这个小小的点实现不同需求的功能而省去多余的代码

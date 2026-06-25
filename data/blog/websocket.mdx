@@ -72,7 +72,7 @@ GET /chat HTTP/1.1
 Host: server.example.com
 Upgrade: websocket
 Connection: Upgrade
-Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
+Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw="="
 Sec-WebSocket-Protocol: chat, superchat
 Sec-WebSocket-Version: 13
 Origin: http://example.com
@@ -88,7 +88,7 @@ Connection: Upgrade
 这就是 websocket 的核心，告诉服务器这是 websocket 请求，而不是 http 请求
 
 ```powershell
-Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
+Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw="="
 Sec-WebSocket-Protocol: chat, superchat
 Sec-WebSocket-Version: 13
 ```
