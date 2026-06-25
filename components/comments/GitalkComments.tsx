@@ -10,7 +10,7 @@ type GitalkCommentsProps = {
 }
 
 type GitalkRuntimeOptions = Gitalk.GitalkOptions & {
-  url: string
+  url?: string
 }
 
 function parseAdmins(value?: string) {
@@ -20,16 +20,22 @@ function parseAdmins(value?: string) {
     .filter(Boolean)
 }
 
+const IS_DEV = process.env.NODE_ENV === 'development'
+
 function getGitalkConfig(slug: string, title?: string) {
   const config = {
-    clientID: process.env.NEXT_PUBLIC_GITALK_CLIENT_ID,
-    clientSecret: process.env.NEXT_PUBLIC_GITALK_CLIENT_SECRET,
+    clientID: IS_DEV
+      ? process.env.NEXT_PUBLIC_GITALK_CLIENT_ID_DEV
+      : process.env.NEXT_PUBLIC_GITALK_CLIENT_ID,
+    clientSecret: IS_DEV
+      ? process.env.NEXT_PUBLIC_GITALK_CLIENT_SECRET_DEV
+      : process.env.NEXT_PUBLIC_GITALK_CLIENT_SECRET,
     repo: process.env.NEXT_PUBLIC_GITALK_REPO || 'GatsbtBlogCommentStore',
     owner: process.env.NEXT_PUBLIC_GITALK_OWNER || 'ruoduan-hub',
     admin: parseAdmins(process.env.NEXT_PUBLIC_GITALK_ADMIN),
     id: getGitalkId(slug),
     title: title || slug,
-    url: getLegacyCommentUrl(slug),
+    url: IS_DEV ? undefined : getLegacyCommentUrl(slug),
   }
 
   return {
@@ -68,10 +74,10 @@ export function GitalkComments({ slug, title }: GitalkCommentsProps) {
           admin: config.admin,
           id: config.id,
           title: config.title,
-          url: config.url,
           labels: ['Gitalk'],
           language: 'zh-CN',
           distractionFreeMode: false,
+          ...(config.url ? { url: config.url } : {}),
         }
 
         const gitalk = new GitalkConstructor(gitalkOptions)
