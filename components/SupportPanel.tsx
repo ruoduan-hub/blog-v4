@@ -41,24 +41,31 @@ export function SupportPanel() {
         ].map((item) => (
           <div
             key={item.src}
-            className="group rounded-xl border border-gray-200/70 bg-white p-6 transition-all hover:border-gray-300 hover:shadow-sm dark:border-gray-800/70 dark:bg-gray-950 dark:hover:border-gray-700 dark:hover:shadow-gray-900"
+            className="group rounded-2xl border border-gray-200/60 bg-white p-6 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-gray-300 hover:shadow-md dark:border-gray-800 dark:bg-gray-900/50 dark:hover:border-gray-700 dark:hover:bg-gray-900/80"
           >
+            {/*
+             * Image container — keeps a clean light surface even in dark mode.
+             * QR codes need black-on-white contrast to remain scannable,
+             * so we don't invert or heavily filter them.
+             * A subtle ring and the card's own dark backdrop frame the
+             * deliberate light-to-dark transition as intentional.
+             */}
             <div className="mx-auto w-40">
-              <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-50 p-1 ring-1 ring-gray-100 dark:bg-gray-900 dark:ring-gray-800">
+              <div className="relative aspect-square overflow-hidden rounded-xl bg-white p-3 ring-1 ring-gray-200/80 dark:ring-gray-700/60">
                 <Image
                   src={item.src}
                   alt={`${item.label}二维码`}
                   fill
-                  className="object-contain"
+                  className="object-contain dark:opacity-95"
                 />
               </div>
             </div>
             <div className="mt-4 flex items-center justify-center gap-2">
               <Heart
-                className="size-3.5 shrink-0 text-rose-400 dark:text-rose-500"
+                className="size-3.5 shrink-0 text-rose-400 dark:text-rose-400"
                 aria-hidden="true"
               />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 {item.label}
               </span>
             </div>

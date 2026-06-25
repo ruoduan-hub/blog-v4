@@ -1,22 +1,33 @@
 @reference "./tailwind.css";
 
 /**
- * CSS Styles for code highlighting.
- * Feel free to customize token styles 
- * by copying from a prismjs compatible theme:
- * https://github.com/PrismJS/prism-themes
+ * Prism syntax highlighting — Night Owl theme by Sarah Drasner.
+ * Original tokens are tuned for dark backgrounds and kept intact.
+ * Only structural styles (titles, line highlights) are customized here.
  */
 
-/* Code title styles */
+/* ── Code title bar ── */
 .remark-code-title {
-  @apply rounded-xs bg-gray-700 px-5 py-3 font-mono text-sm font-bold text-gray-200 dark:bg-gray-800;
+  @apply rounded-t-md px-5 py-3 font-mono text-sm font-bold;
+  background: oklch(0.96 0.002 260);
+  color: oklch(0.35 0.01 260);
+  border: 1px solid oklch(0.88 0.005 260);
+  border-bottom: none;
+}
+
+.dark .remark-code-title {
+  background: oklch(0.22 0.005 260);
+  color: oklch(0.75 0 0);
+  border-color: oklch(0.28 0.005 260);
 }
 
 .remark-code-title + div > pre {
   @apply mt-0 rounded-t-none;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
 
-/* Code block styles */
+/* ── Code block lines ── */
 .code-highlight {
   @apply float-left min-w-full;
 }
@@ -26,30 +37,33 @@
 }
 
 .code-line.inserted {
-  @apply bg-green-500/20;
+  background: oklch(0.55 0.12 160 / 0.15);
 }
 
 .code-line.deleted {
-  @apply bg-red-500/20;
+  background: oklch(0.55 0.18 25 / 0.18);
 }
 
 .highlight-line {
-  @apply border-primary-500 -mx-4 border-l-4 bg-gray-700/50;
+  @apply border-primary-500 -mx-4 border-l-4;
+  background: oklch(0.25 0.01 260 / 0.5);
 }
 
 .line-number::before {
-  @apply mr-4 -ml-2 inline-block w-4 text-right text-gray-400;
+  @apply mr-4 -ml-2 inline-block w-4 text-right;
   content: attr(line);
+  color: oklch(0.5 0 0);
 }
 
-/* Token styles */
-/**
+.dark .line-number::before {
+  color: oklch(0.42 0 0);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * Night Owl token theme — Sarah Drasner
  * MIT License
- * Copyright (c) 2018 Sarah Drasner
- * Sarah Drasner's[@sdras] Night Owl
- * Ported by Sara vieria [@SaraVieira]
- * Added by Souvik Mandal [@SimpleIndian]
- */
+ * ═══════════════════════════════════════════════════════════════ */
+
 .token.comment,
 .token.prolog,
 .token.cdata {

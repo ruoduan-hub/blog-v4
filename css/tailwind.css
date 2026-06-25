@@ -104,42 +104,246 @@
   }
 }
 
-@layer utilities {
-  .prose {
-    & a {
-      color: var(--color-primary-500);
-      &:hover {
-        color: var(--color-primary-600);
-      }
-      & code {
-        color: var(--color-primary-400);
-      }
-    }
-    & :where(h1, h2) {
-      font-weight: 700;
-      letter-spacing: var(--tracking-tight);
-    }
-    & h3 {
-      font-weight: 600;
-    }
-    & :where(code):not(pre code) {
-      color: var(--color-indigo-500);
+/*
+ * ═══════════════════════════════════════════════════════════════
+ * PROSE OVERRIDES — unlayered (highest cascade priority).
+ * Must stay outside @layer to reliably override the
+ * @tailwindcss/typography plugin's layered defaults.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── Light mode ── */
+.prose {
+  --tw-prose-body: oklch(0.3 0.005 260);
+  --tw-prose-bold: oklch(0.22 0.005 260);
+  --tw-prose-headings: oklch(0.18 0.005 260);
+  --tw-prose-lead: oklch(0.48 0.005 260);
+  --tw-prose-links: var(--color-primary-500);
+  --tw-prose-counters: oklch(0.5 0.005 260);
+  --tw-prose-bullets: oklch(0.6 0.008 260);
+  --tw-prose-hr: oklch(0.88 0.005 260);
+  --tw-prose-quotes: oklch(0.38 0.005 260);
+  --tw-prose-quote-borders: oklch(0.85 0.008 260);
+  --tw-prose-captions: oklch(0.5 0.005 260);
+  --tw-prose-code: oklch(0.42 0.03 350);
+  --tw-prose-pre-code: oklch(0.3 0.005 260);
+  --tw-prose-pre-bg: oklch(0.97 0.002 260);
+  --tw-prose-th-borders: oklch(0.85 0.005 260);
+  --tw-prose-td-borders: oklch(0.9 0.005 260);
+
+  font-size: 1.0625rem;
+  line-height: 1.75;
+
+  & h1 {
+    font-size: 2.25rem;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  & h2 {
+    font-size: 1.625rem;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  & h3 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  & a {
+    color: var(--color-primary-500);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    &:hover {
+      color: var(--color-primary-600);
     }
   }
 
-  .prose-invert {
-    & a {
-      color: var(--color-primary-500);
-      &:hover {
-        color: var(--color-primary-400);
-      }
-      & code {
-        color: var(--color-primary-400);
-      }
+  & strong {
+    color: oklch(0.22 0.005 260);
+    font-weight: 600;
+  }
+
+  & blockquote {
+    border-left-color: oklch(0.88 0.008 260);
+    border-left-width: 3px;
+    font-style: normal;
+    color: oklch(0.4 0.005 260);
+    background: transparent;
+  }
+
+  & :where(code):not(pre code) {
+    color: oklch(0.42 0.03 350);
+    background: oklch(0.96 0.005 350 / 0.6);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    font-weight: 500;
+  }
+
+  & hr {
+    border-color: oklch(0.88 0.005 260);
+    margin: 2.5rem 0;
+  }
+
+  & pre {
+    background-color: oklch(0.97 0.002 260);
+    border: 1px solid oklch(0.88 0.005 260);
+    border-radius: 0.625rem;
+  }
+}
+
+/*
+ * ── Dark mode ──
+ *
+ * We target .dark .prose (NOT .prose-invert) to completely
+ * bypass the @tailwindcss/typography plugin's control of
+ * the .prose-invert class at the compiler level.
+ *
+ * The plugin may intercept, rewrite, or ignore .prose-invert
+ * rules because it "owns" that class. Using .dark .prose with
+ * explicit !important on every property is the only reliable
+ * way to force overrides in Tailwind v4.
+ *
+ * Layouts already have "dark:prose-invert" on the element,
+ * but targeting .dark .prose is orthogonal — both .prose and
+ * .dark are present on <html>, so .dark .prose always matches.
+ */
+.dark .prose {
+  /*
+   * ── Body / base text ──
+   * Pure neutral off-white. No chroma tint — clean and bright.
+   */
+  color: oklch(0.88 0 0) !important;
+
+  /*
+   * ── Headings h1–h6 ──
+   * All headings share the same bright white.
+   * Size/weight differentiate hierarchy, not color.
+   */
+  & h1, & h2, & h3, & h4, & h5, & h6 {
+    color: oklch(0.95 0 0) !important;
+  }
+
+  /*
+   * ── Links ──
+   * Rose accent. The primary palette's 400 step pops on dark bg.
+   */
+  & a {
+    color: oklch(0.79 0.15 0) !important;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    &:hover {
+      color: oklch(0.85 0.12 10) !important;
     }
-    & :where(h1, h2, h3, h4, h5, h6) {
-      color: var(--color-gray-100);
-    }
+  }
+
+  /*
+   * ── Bold / strong ──
+   * Slightly brighter than body for scannable emphasis.
+   */
+  & strong, & b {
+    color: oklch(0.93 0 0) !important;
+    font-weight: 600;
+  }
+
+  /*
+   * ── Blockquote ──
+   * No background. Left border for separation.
+   * Text slightly muted from body but still bright enough to read.
+   */
+  & blockquote {
+    background: transparent !important;
+    border-left: 3px solid oklch(0.35 0 0) !important;
+    color: oklch(0.82 0 0) !important;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  /*
+   * ── Inline code ──
+   * Warm amber text on translucent dark background.
+   * Soft contrast — not "white on black".
+   */
+  & :where(code):not(pre code) {
+    color: oklch(0.9 0.05 35) !important;
+    background: oklch(0.3 0.015 30 / 0.35) !important;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    font-weight: 500;
+    border: 1px solid oklch(0.35 0.015 30 / 0.25);
+  }
+
+  /*
+   * ── Horizontal rule ──
+   */
+  & hr {
+    border-color: oklch(0.25 0 0) !important;
+    margin: 2.5rem 0;
+  }
+
+  /*
+   * ── Code blocks (multi-line) ──
+   * Deep warm-black surface with border for definition.
+   */
+  & pre {
+    background-color: oklch(0.17 0.003 260) !important;
+    color: oklch(0.9 0 0) !important;
+    border: 1px solid oklch(0.25 0 0) !important;
+    border-radius: 0.625rem;
+    padding: 1.25rem 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+
+  & pre code {
+    background-color: transparent !important;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  /*
+   * ── Tables ──
+   */
+  & thead {
+    border-bottom-color: oklch(0.25 0 0) !important;
+  }
+  & tbody tr {
+    border-bottom-color: oklch(0.2 0 0) !important;
+  }
+
+  /*
+   * ── Figcaption / image captions ──
+   */
+  & figcaption {
+    color: oklch(0.55 0 0) !important;
+  }
+
+  /*
+   * ── List markers ──
+   */
+  & li::marker {
+    color: oklch(0.5 0 0) !important;
+  }
+
+  /*
+   * ── Lead paragraph ──
+   */
+  & .lead {
+    color: oklch(0.6 0 0) !important;
   }
 }
 
