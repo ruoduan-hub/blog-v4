@@ -1,0 +1,212 @@
+---
+title: LeetCode-三周攻克数据结构-矩阵Matrix
+date: '2021-08-04'
+tags:
+  - 记
+categories:
+  - 《LeetCode-三周攻克数据结构》
+draft: false
+summary: >-
+  这是我参与8月更文挑战的第4天，活动详情查看： 本文题目全部来自 使用 Typescript 本篇文章全部收藏于专栏 本文所有代码和解题步骤将放置 DAY5
+  1. 有效的数独 请你判断一个 9x9 的数独是否有效。只需要 根据以下规则 ，验证已经填入的数字是否有效即可。 数字 19 在每一行只能出现一次。 数字
+  19 
+authors:
+  - default
+---
+
+**这是我参与8月更文挑战的第4天，活动详情查看：[8月更文挑战](https://juejin.cn/post/6987962113788493831 "https://juejin.cn/post/6987962113788493831")**
+
+> 本文题目全部来自 [LeetCode](https://leetcode-cn.com/)
+>
+> 使用 `Typescript`
+>
+> 本篇文章全部收藏于专栏 [3周攻克数据结构-LeetCode](https://juejin.cn/column/6987569745008525343)
+>
+> 本文所有代码和解题步骤将放置 [GitHub仓库](https://github.com/ruoduan-hub/algorithm_py) 
+
+## DAY5
+
+### 1. 有效的数独
+
+    请你判断一个 9x9 的数独是否有效。只需要 根据以下规则 ，验证已经填入的数字是否有效即可。
+    
+    数字 1-9 在每一行只能出现一次。
+    数字 1-9 在每一列只能出现一次。
+    数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）
+    数独部分空格内已填入了数字，空白格用 '.' 表示。
+    
+    注意：
+    
+    一个有效的数独（部分已被填充）不一定是可解的。
+    只需要根据以上规则，验证已经填入的数字是否有效即可。
+
+**示例：**
+
+![250px-sudoku-by-l2g-20050714svg](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ae3e07e21e67462fac449a29a07c82a8~tplv-k3u1fbpfcp-zoom-1.image)
+
+    输入：board = 
+    [["5","3",".",".","7",".",".",".","."]
+    ,["6",".",".","1","9","5",".",".","."]
+    ,[".","9","8",".",".",".",".","6","."]
+    ,["8",".",".",".","6",".",".",".","3"]
+    ,["4",".",".","8",".","3",".",".","1"]
+    ,["7",".",".",".","2",".",".",".","6"]
+    ,[".","6",".",".",".",".","2","8","."]
+    ,[".",".",".","4","1","9",".",".","5"]
+    ,[".",".",".",".","8",".",".","7","9"]]
+    输出：true
+    示例 2：
+    
+    输入：board = 
+    [["8","3",".",".","7",".",".",".","."]
+    ,["6",".",".","1","9","5",".",".","."]
+    ,[".","9","8",".",".",".",".","6","."]
+    ,["8",".",".",".","6",".",".",".","3"]
+    ,["4",".",".","8",".","3",".",".","1"]
+    ,["7",".",".",".","2",".",".",".","6"]
+    ,[".","6",".",".",".",".","2","8","."]
+    ,[".",".",".","4","1","9",".",".","5"]
+    ,[".",".",".",".","8",".",".","7","9"]]
+    输出：false
+    
+    解释：除了第一行的第一个数字从 5 改为 8 以外，空格内其他数字均与 示例1 相同。 但由于位于左上角的 3x3 宫内有两个 8 存在, 因此这个数独是无效的。
+
+ 
+
+#### 方法1：双层遍历-[哈希表]; 【空间换时间】
+
+```
+解法：
+1. 行和列都比较简单直接`遍历`就可以了
+2.主要是 `3x3宫格` 我们分析下 `3x3宫格`宫格的规律 👇🏻
+boxIndex = Math.floor(row/3) * 3 + Math.floor(columns/3)
+```
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1ed4f82ff3b54a68859e5f77b0b61edc~tplv-k3u1fbpfcp-watermark.image)
+
+```
+接下来就比较简单了：
+3. 既然是空间换时间 我们开三个`哈希表`来储存 行、列、9宫格 
+4. 遍历的时候每次储存当前值，用哈希表查询判断是否重复
+
+时间 & 空间: O(1)
+```
+
+
+
+```typescript
+function isValidSudoku(board: string[][]): boolean {
+    /** 初始化横、纵、小九宫格
+     *  每个元素 用 0 表示未被使用,再赋值为一个 map 哈希表
+     */
+    
+    // 每行
+    let rows = new Array(9).fill(0).map(() => new Map())
+    // 每列
+    let columns = new Array(9).fill(0).map(() => new Map())
+    // 每个九宫格
+    let boxes = new Array(9).fill(0).map(() => new Map())
+
+    for(let i = 0; i<9; i++) {
+        for(let j = 0; j<9; j++) {
+            // 遇到 . 跳过
+            if(board[i][j] === '.')continue
+            // 当前元素
+            let num = board[i][j]
+            // 九宫格下标
+            let box_idx = Math.floor(i/3)*3 + Math.floor(j/3)
+
+            // 判断重复直接 false
+            if(rows[i].has(num)) return false
+            if(columns[j].has(num)) return false
+            if(boxes[box_idx].has(num)) return false
+
+            // 每次填充当前元素，1表示为 true； 被使用过了
+            rows[i].set(num, 1)
+            columns[j].set(num, 1)
+            boxes[box_idx].set(num, 1)
+        }
+    }
+
+    return true
+
+}
+```
+
+
+### 2. 矩阵置零
+
+> 给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
+>
+> 进阶：
+>
+> 一个直观的解决方案是使用  O(mn) 的额外空间，但这并不是一个好的解决方案。
+> 一个简单的改进方案是使用 O(m + n) 的额外空间，但这仍然不是最好的解决方案。
+> 你能想出一个仅使用常量空间的解决方案吗？
+
+**示例1：**
+
+<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3522403a58384d9a885d17fac4baa2b7~tplv-k3u1fbpfcp-zoom-1.image" alt="mat1" style="zoom:67%;" />
+
+```
+输入：matrix = [[1,1,1],[1,0,1],[1,1,1]] 
+输出：[[1,0,1],[0,0,0],[1,0,1]]
+```
+
+**示例2：**
+
+<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6db3ad5c63d04b3d886927797dbcae71~tplv-k3u1fbpfcp-zoom-1.image" alt="mat2" style="zoom:67%;" />
+
+```
+输入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]] 
+输出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+```
+
+#### 方法1：数组标记法
+
+```
+空间换时间
+时间复杂度：O(mn)O(mn)
+空间复杂度：O(m+n)O(m+n)
+
+思路还是一样的：
+1. 遍历数组记录行、列 出现的下标，也就是 x,y 轴的坐标
+2. 根据距离下来的坐标遍历对 矩阵置 0
+```
+
+
+
+```typescript
+/**
+ Do not return anything, modify matrix in-place instead.
+ */
+function setZeroes(matrix: number[][]): void {
+    // 储存 行、列 出现过0的位置 并且去重 
+    const rowsIndex = new Set()
+    const columnsIndex = new Set()
+
+    // 矩阵 长、宽
+    const m = matrix.length
+    const n = matrix[0].length
+
+    // 筛选出 x,y 坐标出现过 0 的位置
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if(!matrix[i][j]) {
+                rowsIndex.add(i)
+                columnsIndex.add(j)
+            }
+        }
+    } 
+
+    // 置为 0 
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if(Array.from(rowsIndex).includes(i) || Array.from(columnsIndex).includes(j)) {
+                matrix[i][j] = 0
+            }
+        }
+    } 
+
+};
+
+```

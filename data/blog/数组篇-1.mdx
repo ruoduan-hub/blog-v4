@@ -1,0 +1,311 @@
+---
+title: LeetCode-三周攻克数据结构-数组篇-1
+date: '2021-08-01'
+tags:
+  - 记
+categories:
+  - 《LeetCode-三周攻克数据结构》
+draft: false
+summary: "本文题目全部来自 使用 Typescript 本篇文章全部收藏于专栏 本文所有代码和解题步骤将放置 Day1 1. 存在重复元素 给定一个整数数组，判断是否存在重复元素。 如果存在一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。 示例 \U0001F447\U0001F3FB 方法1：Set结构 利用"
+authors:
+  - default
+---
+
+> > 本文题目全部来自 [LeetCode](https://leetcode-cn.com/)
+> >
+> > 使用 `Typescript`
+> >
+> > 本篇文章全部收藏于专栏 [3周攻克数据结构-LeetCode](https://juejin.cn/column/6987569745008525343)
+> >
+> > 本文所有代码和解题步骤将放置 [GitHub仓库](https://github.com/ruoduan-hub/algorithm_py) 
+>
+>
+> ## Day1
+>
+> ### 1. **存在重复元素**
+>
+> > 给定一个整数数组，判断是否存在重复元素。
+> > 如果存在一值在数组中出现至少两次，函数返回 `true` 。如果数组中每个元素都不相同，则返回 `false` 。
+>
+> 示例 👇🏻
+>
+> ```js
+> 示例 1:
+> 
+> 输入: [1,2,3,1]
+> 输出: true
+> 示例 2:
+> 
+> 输入: [1,2,3,4]
+> 输出: false
+> 示例 3:
+> 
+> 输入: [1,1,1,3,3,4,3,2,4,2]
+> 输出: true
+> 
+> ```
+>
+> #### 方法1：Set结构
+>
+> > 利用Set结构一行解决
+>
+> ```typescript
+> function containsDuplicate(nums: number[]): boolean {
+>     const setNums: Array<any> = [...new Set(nums)]
+>     return setNums.length !== nums.length
+> };
+> ```
+>
+> #### 方法2：优化版暴力解法
+>
+> ```typescript
+> function containsDuplicate(nums: number[]): boolean {
+>     let newArr: Array<any> = [...nums]
+>     let res: boolean = false
+>     for(let i = 0; i <nums.length; i++){
+>         const item: any = newArr.splice(0, 1)[0]
+>         res = newArr.includes(item)
+>         if(res)break
+>     }
+>     return res
+> };
+> 
+> ```
+>
+>
+> ### 2. 最大子序和
+>
+> > 给定一个整数数组 `nums` ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+>
+> ```
+> 示例 1：
+> 
+> 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+> 输出：6
+> 解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+> 示例 2：
+> 
+> 输入：nums = [1]
+> 输出：1
+> 示例 3：
+> 
+> 输入：nums = [0]
+> 输出：0
+> 示例 4：
+> 
+> 输入：nums = [-1]
+> 输出：-1
+> 示例 5：
+> 
+> 输入：nums = [-100000]
+> 输出：-100000
+> 
+> ```
+>
+> #### 方法1：动态规划
+>
+> ```typescript
+> function maxSubArray(nums: number[]): number {
+>     let sum = 0;
+>     let ans = nums[0]
+>     for(const num of nums) {
+>         if(sum > 0) {
+>             sum += num
+>         } else {
+>             sum = num
+>         }
+>         ans = Math.max(ans, sum)
+> 
+>     }
+>     return ans
+> };
+> ```
+>
+> ---
+>
+>
+> ## DAY2
+>
+>
+> ### 1. 两数之和
+>
+> ```js
+> 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
+> 
+> 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
+> 
+> 你可以按任意顺序返回答案。
+> 
+>  
+> 
+> 示例 1：
+> 
+> 输入：nums = [2,7,11,15], target = 9
+> 输出：[0,1]
+> 解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
+> 示例 2：
+> 
+> 输入：nums = [3,2,4], target = 6
+> 输出：[1,2]
+> 示例 3：
+> 
+> 输入：nums = [3,3], target = 6
+> 输出：[0,1]
+> 
+> ```
+>
+> #### 方法1：爆破
+>
+> > 2 个 for 循环直接暴力解法
+>
+> ```typescript
+>   function twoSum(nums: number[], target: number): number[] {
+>       for (let i = 0; i < nums.length - 1; i++) {
+>           for (let j = i + 1; j < nums.length; j++) {
+>               if (target === nums[j] + nums[i]) {
+>                   return [i, j];
+>               }
+>           }
+>       }
+>   }
+> ```
+>
+>
+> #### 方法2：哈希表查询
+>
+> > 1. 建立一个`值`与`下标`的哈希表
+> > 2. 遍历一次数组用 `target - 数组的value`  = 结果，结果在我们的哈希表里面执行 `.has`找得到就返回下标
+>
+>
+>  ```typescript
+>  
+>  function twoSum(nums: number[], target: number): number[] {
+>     let map = new Map<number, number>()
+>     for (let i = 0; i < nums.length; i++) {
+>        if(map.has(target - nums[i])){
+>            // 返回建立的哈希表的下标的值，和当前的下标
+>            return [map.get(target - nums[i]), i];
+>        } else {
+>            // 储存值为 key 下标为 index
+>            map.set(nums[i], i);
+>        }
+>     }
+>     return []
+> }
+> 
+>  ```
+>
+>
+> ### 2. 合并两个有序数组
+>
+> > 给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
+> >
+> > 初始化 nums1 和 nums2 的元素数量分别为 m 和 n 。你可以假设 nums1 的空间大小等于 m + n，这样它就> 有足够的空间保存来自 nums2 的元素。
+> >
+> > 
+> >
+> > 示例 1：
+> >
+> > 输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+> > 输出：[1,2,2,3,5,6]
+> > 示例 2：
+> >
+> > 输入：nums1 = [1], m = 1, nums2 = [], n = 0
+> > 输出：[1]
+>
+> 
+>
+> #### 方法1：合并数组排序
+>
+> > 直接使用 API
+>
+> ```typescript
+> function merge(nums1: number[], m: number, nums2: number[], n: number): void {
+>     nums1.splice(m, nums1.length - m, ...nums2);
+>     nums1.sort((a, b) => a - b);
+> };
+> ```
+>
+>
+> #### 方法2：双指针
+>
+> > 双指针的步骤为了方便查看全写在代码里面了
+> >
+> > 可以根据官方这张图结合代码来理解 👇
+>
+> ![双指针](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4621acf7ec08468995683011c2168292~tplv-k3u1fbpfcp-zoom-1.image)
+>
+>
+> ```typescript
+> /**
+>  Do not return anything, modify nums1 in-place instead.
+>  */
+> function merge(nums1: number[], m: number, nums2: number[], n: number): void {
+>    // 定义2个从0 开始的指针，分别用来遍历 nums1 和 nums2
+>    let p1 = 0, p2 = 0;
+>    // 空数组储存排序后的值
+>     const sorted = new Array(m + n).fill(0);
+>     // 当次排序的值
+>     var cur: number;
+>     
+>     // 开始遍历2个数组
+>     while (p1 < m || p2 < n) {
+>         if (p1 === m) {
+>             cur = nums2[p2++];
+>         } else if (p2 === n) {
+>             cur = nums1[p1++];
+>         } else if (nums1[p1] < nums2[p2]) {
+>             cur = nums1[p1++];
+>         } else {
+>             cur = nums2[p2++];
+>         }
+> 
+>         sorted[p1 + p2 - 1] = cur;
+>     }
+>     for (let i = 0; i != m + n; ++i) {
+>         nums1[i] = sorted[i];
+>     }
+> };
+> ```
+>
+>
+> #### 方法3：逆向双指针
+>
+>
+> > 方法2的优化版，节省一个内存空间的位置，我们已知`mums1 的长度 = m + n`，后半部分的元素都是空的所有`nums`和 `nums2` 永远不会相交所有从尾部可以直接给`nums1`赋值
+>
+> ```typescript
+> /**
+>  Do not return anything, modify nums1 in-place instead.
+>  */
+> function merge(nums1: number[], m: number, nums2: number[], n: number): void {
+>     // 指针从尾部开始
+>     let p1 = m - 1
+>     let p2 = n - 1
+>     // 总长度
+>     let tail = m + n - 1;
+>     // 当次排序的值
+>     let cur: number;
+> 
+>     while (p1 >= 0 || p2 >= 0) {
+>         if (p1 === -1) {
+>             cur = nums2[p2--];
+>         } else if (p2 === -1) {
+>             cur = nums1[p1--];
+>         } else if (nums1[p1] > nums2[p2]) {
+>             cur = nums1[p1--];
+>         } else {
+>             cur = nums2[p2--];
+>         }
+>         nums1[tail--] = cur;
+>     }
+> };
+> 
+> ```
+>
+> ---
+>
+>
+> - 小尾巴~
+>
+> > 本文持续更新专栏 ———— [3周攻克数据结构-LeetCode](https://juejin.cn/column/6987569745008525343 "https://juejin.cn/column/6987569745008525343")

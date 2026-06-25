@@ -100,22 +100,43 @@ export function rewriteAssetRefs(body, slug) {
   return { body: nextBody, assets: [...assets] }
 }
 
+async function findSameStemAsset(dir, fileName) {
+  const stem = path.parse(fileName).name
+
+  try {
+    const entries = await fs.readdir(dir, { withFileTypes: true })
+    const match = entries.find((entry) => entry.isFile() && path.parse(entry.name).name === stem)
+    return match?.name
+  } catch {
+    return undefined
+  }
+}
+
 async function copyAsset({ sourceBlogDir, targetAssetDir, slug, asset }) {
   const directSource = path.join(sourceBlogDir, asset)
   const fallbackSource = path.join(sourceBlogDir, slug, path.basename(asset))
-  const targetAsset = path.join(targetAssetDir, slug, path.basename(asset))
+  const fallbackDir = path.join(sourceBlogDir, slug)
+  const requestedFileName = path.basename(asset)
 
   try {
+    const targetAsset = path.join(targetAssetDir, slug, requestedFileName)
     await fs.mkdir(path.dirname(targetAsset), { recursive: true })
     await fs.copyFile(directSource, targetAsset)
-    return true
+    return requestedFileName
   } catch {
     try {
+      const targetAsset = path.join(targetAssetDir, slug, requestedFileName)
       await fs.mkdir(path.dirname(targetAsset), { recursive: true })
       await fs.copyFile(fallbackSource, targetAsset)
-      return true
+      return requestedFileName
     } catch {
-      return false
+      const sameStemFile = await findSameStemAsset(fallbackDir, requestedFileName)
+      if (!sameStemFile) return null
+
+      const targetAsset = path.join(targetAssetDir, slug, sameStemFile)
+      await fs.mkdir(path.dirname(targetAsset), { recursive: true })
+      await fs.copyFile(path.join(fallbackDir, sameStemFile), targetAsset)
+      return sameStemFile
     }
   }
 }
@@ -149,19 +170,24 @@ export async function migrateAll({ sourceRoot, targetRoot, publicRoot, cleanTarg
     const safeBody = toMdxSafeBody(parsed.content)
     const rewritten = rewriteAssetRefs(safeBody, slug)
     const frontmatter = normalizeFrontmatter(parsed.data, raw, parsed.content)
-    const output = matter.stringify(rewritten.body, frontmatter)
-
-    await fs.writeFile(path.join(targetBlogDir, `${slug}.mdx`), output)
-    result.posts += 1
+    let nextBody = rewritten.body
 
     for (const asset of rewritten.assets) {
-      const copied = await copyAsset({ sourceBlogDir, targetAssetDir, slug, asset })
-      if (copied) {
+      const copiedFileName = await copyAsset({ sourceBlogDir, targetAssetDir, slug, asset })
+      if (copiedFileName) {
+        const requestedPath = `/static/blog/${slug}/${path.basename(asset)}`
+        const copiedPath = `/static/blog/${slug}/${copiedFileName}`
+        nextBody = nextBody.replaceAll(requestedPath, copiedPath)
         result.assets += 1
       } else {
         result.missingAssets.push(asset)
       }
     }
+
+    const output = matter.stringify(nextBody, frontmatter)
+
+    await fs.writeFile(path.join(targetBlogDir, `${slug}.mdx`), output)
+    result.posts += 1
   }
 
   return result

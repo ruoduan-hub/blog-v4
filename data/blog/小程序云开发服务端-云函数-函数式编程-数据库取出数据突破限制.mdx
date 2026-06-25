@@ -1,0 +1,68 @@
+---
+title: 小程序云开发服务端(云函数-函数式编程)数据库取出数据突破限制
+date: '2019-11-14'
+tags:
+  - web-other
+categories:
+  - 《web-other》
+draft: false
+summary: "获取集合中的所有待办事项清单：因为有默认 limit 100 条的限制，因此很可能一个请求无法取出所有数据，需要分批次取： 步骤 1. 定义最大条数也就是 下面 \U0001F447 示 \U0001F330 中的 MAXLIMIT 2. 获取数据总条数 countResult.total 3. 总条数 / MAXLIMIT 想上取整计算出 要取几次"
+authors:
+  - default
+---
+
+> 获取集合中的所有待办事项清单：因为有默认 limit 100 条的限制，因此很可能一个请求无法取出所有数据，需要分批次取：
+
+### 步骤
+
+1. 定义最大条数也就是 下面 👇 示 🌰 中的 `MAX_LIMIT`
+2. 获取数据总条数 `countResult.total`
+3. 总条数 / MAX_LIMIT 想上取整计算出 要取几次 `batchTimes`
+4. 关键步骤：
+   - 遍历`batchTimes` 利用`skip()` 向数据库取对应次数的数据
+   - 返回的若干的`Promise` 储存在 `tasks`数组中
+5. 创建储存数据的列表 `data`
+6. 组合数据
+   - `Promise.all(tasks)`
+   - `reduce((acc, cur)` 组合数据
+
+## 注意 ⚠️： 数据操作大部分都是异步操作；小程序的云开发目前也是基于 nodejs8
+
+### 小栗子 🌰
+
+```js
+// 云函数入口文件
+const cloud = require('wx-server-sdk')
+cloud.init()
+// 初始化云数据库
+const db = cloud.database()
+const MAX_LIMIT = 100
+
+exports.main = async (event, context) => {
+  // 数据库对象
+  const playCollection = await db.collection("playlist")
+  // 数据库集合总数
+  const countResult = await db.collection('playlist').count()
+  const total = countResult.total
+  // 计算需分几次取
+  const batchTimes = Math.ceil(total / 100)
+  // 承载所有读操作的 promise 的数组
+  const tasks = []
+  for (let i = 0; i < batchTimes; i++) {
+    const promise = db.collection('playlist').skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
+    tasks.push(promise)
+  }
+
+  let data = {
+    data: []
+  }
+  // 组合数据
+  if (tasks.length > 0) {
+    (await Promise.all(tasks)).reduce((acc, cur) => {
+      return {
+        data: acc.data.concat(cur.data),
+      }
+    })
+  }
+
+```
