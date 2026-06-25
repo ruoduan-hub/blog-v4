@@ -9,6 +9,11 @@ export type MusicTrack = {
   src: string
 }
 
+export type SiteStackNote = {
+  title: string
+  description: string
+}
+
 export const profile = {
   name: 'Ruoduan',
   handle: 'ruoduan-hub',
@@ -35,16 +40,38 @@ export const profile = {
   },
   siteHistory: [
     '2024年6月14日 use loremflickr.com | rm unsplash',
-    '2024年03月08日 Comment use Gitalk',
+    '2024年03月08日 Comment use Gitalk（Leancloud 节点关闭数据丢失）',
     '2024年02月18日 更新 Avatar & Guitar Video',
     '2023年12月09日 更新 Header 烟花效果',
     '2023年11月26日 更新吉他曲目',
-    '2022年4月 框架升级到 V4 版本',
-    '2021年7月 增加 Search 功能',
+    '2023年09月09日 添加 OpenAI DALL.E 绘图工具',
+    '2023年4月 迁移阿里云服务器，使用 Vercel + Serverless 部署',
+    '2023年3月 重构 Gatsby，升级到 V5 版本，使用 Node.js 18 构建',
+    '2022年11月25日 添加 Google reCAPTCHA',
+    '2022年4月 框架升级到 V4 版本，更新 webpack 5、React 18 等插件',
+    '2021年8月 移除 antd，使用 material-ui 并优化 typographyjs',
+    '2021年7月 增加 Sentry 错误监控',
+    '2021年7月 增加 Algolia Search 功能',
+    '2021年3月 增加 Valine-Admin 评论管理后台（已移除）',
+    '2021年2月 重构 Gatsby 博客',
     '2020年2月 使用 Gatsby',
     '2019年3月 切换到 VuePress',
     '2018年7月 使用 Hexo 正式搭建博客',
   ],
+  siteStackNotes: [
+    {
+      title: '当前版本',
+      description: 'Next.js、TypeScript、Contentlayer、Tailwind CSS、shadcn/ui、Gitalk。',
+    },
+    {
+      title: '旧站能力',
+      description: 'Gatsby、MDX、Github Actions、Sitemap、SEO、暗色模式、搜索、评论系统。',
+    },
+    {
+      title: '部署方式',
+      description: '从 CentOS7、Nginx、certbot 迁移到 Vercel CI/CD 与 Serverless。',
+    },
+  ] satisfies SiteStackNote[],
   music: [
     {
       src: '/static/music/老男孩-(片段).m4a',
