@@ -5,7 +5,10 @@ import ListLayout from '@/layouts/ListLayoutWithTags'
 
 const POSTS_PER_PAGE = 5
 
-export const metadata = genPageMetadata({ title: '文章' })
+export const metadata = genPageMetadata({
+  title: '文章',
+  description: 'Chad 的技术博客文章列表，涵盖前端、工程化、Node.js、Python 等领域。',
+})
 
 export default async function BlogPage(props: { searchParams: Promise<{ page: string }> }) {
   const posts = allCoreContent(sortPosts(allBlogs))

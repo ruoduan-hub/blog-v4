@@ -20,7 +20,7 @@ export const profile = {
   title: 'Web全栈开发工程师',
   email: 'z.ruoduan@gmail.com',
   location: 'China',
-  intro: '记录Web开发、工程化、Node.js、Python、部署和个人折腾的技术实验室。',
+  intro: '记录 Web 开发、工程化、Node.js、Python、部署和个人探索的技术实验室。',
   quote: '我们逆水行舟，奋力向前，直至被推回到往昔岁月。',
   socialLinks: [
     { label: 'GitHub', href: 'https://github.com/ruoduan-hub' },

@@ -45,7 +45,7 @@ export function LabHero({ postCount }: LabHeroProps) {
           variants={stagger}
           initial="initial"
           animate="animate"
-          className="mt-6 max-w-2xl text-base leading-8 text-gray-600 dark:text-gray-300"
+          className="mt-6 max-w-2xl text-base leading-7 text-gray-600 dark:text-gray-300"
         >
           {profile.intro}
         </motion.p>

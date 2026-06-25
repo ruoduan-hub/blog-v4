@@ -1,7 +1,5 @@
 import 'css/tailwind.css'
-import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
-import 'gitalk/dist/gitalk.css'
 
 import { Space_Grotesk } from 'next/font/google'
 import { Suspense } from 'react'
@@ -19,6 +17,7 @@ import { Metadata } from 'next'
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
+  preload: true,
   variable: '--font-space-grotesk',
 })
 
@@ -35,7 +34,7 @@ export const metadata: Metadata = {
     url: './',
     siteName: siteMetadata.title,
     images: [siteMetadata.socialBanner],
-    locale: 'en_US',
+    locale: 'zh_CN',
     type: 'website',
   },
   alternates: {
@@ -97,6 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="msapplication-TileColor" content="#000000" />
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+      <link rel="preconnect" href="https://api.github.com" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
         <ThemeProviders>

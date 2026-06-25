@@ -55,6 +55,7 @@ export function GitalkComments({ slug, title }: GitalkCommentsProps) {
     container.innerHTML = ''
     setError(undefined)
 
+    import('gitalk/dist/gitalk.css')
     import('gitalk')
       .then(({ default: GitalkConstructor }) => {
         if (!mounted) return

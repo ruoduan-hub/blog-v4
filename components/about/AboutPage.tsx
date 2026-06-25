@@ -91,7 +91,7 @@ function ProfileHero() {
         <div className="relative size-36 overflow-hidden rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-800 dark:bg-gray-900">
           <Image
             src="/static/images/avatarImg.jpg"
-            alt="Ruoduan avatar"
+            alt={`${profile.name} avatar`}
             fill
             className="object-cover"
           />

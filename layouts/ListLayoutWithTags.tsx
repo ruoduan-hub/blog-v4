@@ -24,8 +24,6 @@ interface ListLayoutProps {
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
   const pathname = usePathname()
-  const segments = pathname.split('/')
-  const lastSegment = segments[segments.length - 1]
   const basePath = pathname
     .replace(/^\//, '') // Remove leading slash
     .replace(/\/page\/\d+\/?$/, '') // Remove any trailing /page
@@ -84,7 +82,7 @@ export default function ListLayoutWithTags({
     <>
       <div>
         <div className="pt-6 pb-6">
-          <h1 className="text-3xl leading-9 font-semibold tracking-normal text-gray-900 sm:hidden sm:text-4xl sm:leading-10 md:text-5xl md:leading-14 dark:text-gray-100">
+          <h1 className="text-3xl leading-9 font-semibold tracking-normal text-gray-900 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14 dark:text-gray-100">
             {title}
           </h1>
         </div>
@@ -125,7 +123,7 @@ export default function ListLayoutWithTags({
             </div>
           </div>
           <div>
-            <ul>
+            <ul className="divide-y divide-gray-200 dark:divide-gray-800">
               {displayPosts.map((post, index) => {
                 const { path, date, title, summary, tags } = post
                 return (
@@ -151,7 +149,7 @@ export default function ListLayoutWithTags({
                       </dl>
                       <div className="space-y-3">
                         <div>
-                          <h2 className="text-2xl leading-8 font-bold tracking-tight">
+                          <h2 className="text-2xl leading-8 font-semibold tracking-normal">
                             <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
                               {title}
                             </Link>
@@ -160,9 +158,11 @@ export default function ListLayoutWithTags({
                             {tags?.map((tag) => <Tag key={tag} text={tag} />)}
                           </div>
                         </div>
-                        <div className="prose max-w-none text-gray-500 dark:text-gray-400">
-                          {summary}
-                        </div>
+                        {summary && (
+                          <p className="text-sm leading-7 text-gray-600 dark:text-gray-400">
+                            {summary}
+                          </p>
+                        )}
                       </div>
                     </article>
                   </motion.li>
