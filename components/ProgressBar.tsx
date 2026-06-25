@@ -38,7 +38,7 @@ export default function ProgressBar() {
     <motion.div
       ref={scope}
       initial={{ scaleX: 0, opacity: 0 }}
-      className="pointer-events-none fixed top-0 left-0 right-0 z-[9999] h-[2px] origin-left bg-primary-500"
+      className="bg-primary-500 pointer-events-none fixed top-0 right-0 left-0 z-[9999] h-[2px] origin-left"
     />
   )
 }

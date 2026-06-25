@@ -1,12 +1,5 @@
 import Image from 'next/image'
-import {
-  Code2,
-  ExternalLink,
-  History,
-  Mail,
-  MapPin,
-  Music2,
-} from 'lucide-react'
+import { Code2, ExternalLink, History, Mail, MapPin, Music2 } from 'lucide-react'
 import Comments from '@/components/Comments'
 import { SupportPanel } from '@/components/SupportPanel'
 import ScrollReveal from '@/components/ScrollReveal'

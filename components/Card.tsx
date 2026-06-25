@@ -11,7 +11,7 @@ const Card = ({ title, description, imgSrc, href }) => (
       transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] as const }}
       className={`${
         imgSrc && 'h-full'
-      } overflow-hidden rounded-md border-2 border-gray-200/60 transition-colors hover:border-primary-200 dark:border-gray-700/60 dark:hover:border-primary-800`}
+      } hover:border-primary-200 dark:hover:border-primary-800 overflow-hidden rounded-md border-2 border-gray-200/60 transition-colors dark:border-gray-700/60`}
     >
       {imgSrc &&
         (href ? (
