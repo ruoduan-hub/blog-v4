@@ -1,30 +1,45 @@
 'use client'
 
-import { motion, useAnimate } from 'motion/react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 export default function ProgressBar() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [scope, animate] = useAnimate()
+  const barRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    const bar = barRef.current
+    if (!bar) return
+
     let cancelled = false
 
     const run = async () => {
-      await animate(scope.current, { scaleX: [0, 0.25], opacity: 1 }, { duration: 0.08 })
-      if (cancelled) return
-      await animate(scope.current, { scaleX: 0.55 }, { duration: 0.12 })
-      if (cancelled) return
-      await animate(scope.current, { scaleX: 0.82 }, { duration: 0.15 })
-      if (cancelled) return
-      await animate(scope.current, { scaleX: 0.96 }, { duration: 0.25 })
-      if (cancelled) return
-      await animate(scope.current, { scaleX: 1 }, { duration: 0.05 })
-      await animate(scope.current, { opacity: 0 }, { duration: 0.15 })
+      const steps = [
+        { scaleX: 0.25, opacity: 1, duration: 80 },
+        { scaleX: 0.55, duration: 120 },
+        { scaleX: 0.82, duration: 150 },
+        { scaleX: 0.96, duration: 250 },
+        { scaleX: 1, duration: 50 },
+      ]
+
+      for (const step of steps) {
+        if (cancelled) return
+        const animation = bar.animate(
+          {
+            transform: [
+              `scaleX(${bar.getAnimations().length > 0 ? 'inherit' : '0'})`,
+              `scaleX(${step.scaleX})`,
+            ],
+            opacity: [null, step.opacity ?? 1],
+          },
+          { duration: step.duration, fill: 'forwards', easing: 'ease-out' }
+        )
+        await animation.finished
+      }
+
       if (!cancelled) {
-        animate(scope.current, { scaleX: 0 }, { duration: 0 })
+        bar.animate({ opacity: [1, 0] }, { duration: 150, fill: 'forwards', easing: 'ease-out' })
       }
     }
 
@@ -32,13 +47,13 @@ export default function ProgressBar() {
     return () => {
       cancelled = true
     }
-  }, [pathname, searchParams, animate, scope])
+  }, [pathname, searchParams])
 
   return (
-    <motion.div
-      ref={scope}
-      initial={{ scaleX: 0, opacity: 0 }}
+    <div
+      ref={barRef}
       className="bg-primary-500 pointer-events-none fixed top-0 right-0 left-0 z-[9999] h-[2px] origin-left"
+      style={{ transform: 'scaleX(0)', opacity: '0' }}
     />
   )
 }

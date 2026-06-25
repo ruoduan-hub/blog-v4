@@ -3,21 +3,21 @@
 import { useState } from 'react'
 import { MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { GitalkComments } from '@/components/comments/GitalkComments'
+import { GiscusComments } from '@/components/comments/GiscusComments'
 import siteMetadata from '@/data/siteMetadata'
 
 export default function Comments({ slug, title }: { slug: string; title?: string }) {
   const [loadComments, setLoadComments] = useState(false)
   const commentsProvider = (siteMetadata.comments as { provider?: string } | undefined)?.provider
 
-  if (commentsProvider !== 'gitalk') {
+  if (commentsProvider !== 'giscus') {
     return null
   }
 
   return (
     <div className="not-prose">
       {loadComments ? (
-        <GitalkComments slug={slug} title={title} />
+        <GiscusComments slug={slug} title={title} />
       ) : (
         <Button
           type="button"

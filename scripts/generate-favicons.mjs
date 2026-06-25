@@ -1,14 +1,14 @@
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { readFileSync, writeFileSync } from 'fs';
-import sharp from 'sharp';
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { readFileSync, writeFileSync } from 'fs'
+import sharp from 'sharp'
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '..');
-const LOGO = join(ROOT, 'data', 'logo.svg');
-const OUT_DIR = join(ROOT, 'public', 'static', 'favicons');
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const ROOT = join(__dirname, '..')
+const LOGO = join(ROOT, 'data', 'logo.svg')
+const OUT_DIR = join(ROOT, 'public', 'static', 'favicons')
 
-const logoBuffer = readFileSync(LOGO);
+const logoBuffer = readFileSync(LOGO)
 
 // ── PNG favicons ──────────────────────────────────────────────────────────
 const pngSizes = [
@@ -19,23 +19,23 @@ const pngSizes = [
   { name: 'android-chrome-512x512.png', size: 512 },
   { name: 'apple-touch-icon.png', size: 180 },
   { name: 'mstile-150x150.png', size: 150 },
-];
+]
 
 await Promise.all(
   pngSizes.map(async ({ name, size }) => {
     await sharp(logoBuffer)
       .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .png()
-      .toFile(join(OUT_DIR, name));
-    console.log(`  ✓ ${name} (${size}×${size})`);
+      .toFile(join(OUT_DIR, name))
+    console.log(`  ✓ ${name} (${size}×${size})`)
   })
-);
+)
 
 // ── favicon.ico (multi-size) ──────────────────────────────────────────────
 await sharp(logoBuffer)
   .resize(32, 32, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-  .toFile(join(OUT_DIR, 'favicon.ico'));
-console.log('  ✓ favicon.ico (32×32)');
+  .toFile(join(OUT_DIR, 'favicon.ico'))
+console.log('  ✓ favicon.ico (32×32)')
 
 // ── safari-pinned-tab.svg ─────────────────────────────────────────────────
 // Safari pinned tabs use a monochrome SVG mask — no metadata, black fill
@@ -71,10 +71,10 @@ const pinnedTabSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64
 <path fill="#000000" d="M220 161 c0 -6 8 -11 18 -12 12 0 11 -3 -6 -10 -30 -12 -23 -33 12
 -37 26 -3 27 -1 24 30 -2 25 -8 34 -25 36 -13 2 -23 -1 -23 -7z m30 -41 c0 -5
 -4 -10 -10 -10 -5 0 -10 5 -10 10 0 6 5 10 10 10 6 0 10 -4 10 -10z"/>
-</svg>`;
+</svg>`
 
-writeFileSync(join(OUT_DIR, 'safari-pinned-tab.svg'), pinnedTabSvg);
-console.log('  ✓ safari-pinned-tab.svg');
+writeFileSync(join(OUT_DIR, 'safari-pinned-tab.svg'), pinnedTabSvg)
+console.log('  ✓ safari-pinned-tab.svg')
 
 // ── site.webmanifest ──────────────────────────────────────────────────────
 const manifest = {
@@ -93,9 +93,9 @@ const manifest = {
   theme_color: '#000000',
   background_color: '#000000',
   display: 'standalone',
-};
+}
 
-writeFileSync(join(OUT_DIR, 'site.webmanifest'), JSON.stringify(manifest, null, 2) + '\n');
-console.log('  ✓ site.webmanifest');
+writeFileSync(join(OUT_DIR, 'site.webmanifest'), JSON.stringify(manifest, null, 2) + '\n')
+console.log('  ✓ site.webmanifest')
 
-console.log('\nDone — all favicons regenerated.');
+console.log('\nDone — all favicons regenerated.')

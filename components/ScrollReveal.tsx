@@ -1,12 +1,6 @@
 'use client'
 
-import { motion, type Variants } from 'motion/react'
-import { type ReactNode } from 'react'
-
-const defaultTransition = {
-  duration: 0.5,
-  ease: [0.25, 0.1, 0.25, 1] as const,
-}
+import { type ReactNode, useEffect, useRef } from 'react'
 
 export default function ScrollReveal({
   children,
@@ -17,24 +11,29 @@ export default function ScrollReveal({
   className?: string
   delay?: number
 }) {
-  const variants: Variants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { ...defaultTransition, delay },
-    },
-  }
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.style.animation = `scroll-reveal 0.5s cubic-bezier(0.25,0.1,0.25,1) ${delay}s forwards`
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '-60px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [delay])
 
   return (
-    <motion.div
-      className={className}
-      variants={variants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-60px' }}
-    >
+    <div ref={ref} className={className} style={{ opacity: 0, transform: 'translateY(24px)' }}>
       {children}
-    </motion.div>
+    </div>
   )
 }

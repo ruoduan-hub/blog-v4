@@ -17,7 +17,7 @@ const siteMetadata = {
     provider: '',
   },
   comments: {
-    provider: 'gitalk',
+    provider: 'giscus',
   },
   search: {
     provider: 'kbar',

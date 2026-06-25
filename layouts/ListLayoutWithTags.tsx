@@ -5,7 +5,6 @@ import { slug } from 'github-slugger'
 import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
-import { motion } from 'motion/react'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
@@ -25,9 +24,9 @@ interface ListLayoutProps {
 function Pagination({ totalPages, currentPage }: PaginationProps) {
   const pathname = usePathname()
   const basePath = pathname
-    .replace(/^\//, '') // Remove leading slash
-    .replace(/\/page\/\d+\/?$/, '') // Remove any trailing /page
-    .replace(/\/$/, '') // Remove trailing slash
+    .replace(/^\//, '')
+    .replace(/\/page\/\d+\/?$/, '')
+    .replace(/\/$/, '')
   const prevPage = currentPage - 1 > 0
   const nextPage = currentPage + 1 <= totalPages
 
@@ -127,16 +126,10 @@ export default function ListLayoutWithTags({
               {displayPosts.map((post, index) => {
                 const { path, date, title, summary, tags } = post
                 return (
-                  <motion.li
+                  <li
                     key={path}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: index * 0.04,
-                      duration: 0.3,
-                      ease: [0.25, 0.1, 0.25, 1] as const,
-                    }}
-                    className="py-5"
+                    className="animate-item-reveal py-5"
+                    style={{ animationDelay: `${index * 40}ms` }}
                   >
                     <article className="flex flex-col space-y-2 xl:space-y-0">
                       <dl>
@@ -165,7 +158,7 @@ export default function ListLayoutWithTags({
                         )}
                       </div>
                     </article>
-                  </motion.li>
+                  </li>
                 )
               })}
             </ul>
