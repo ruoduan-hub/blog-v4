@@ -6,6 +6,21 @@
 @source '../node_modules/pliny';
 @custom-variant dark (&:where(.dark, .dark *));
 
+@layer components {
+  .gitalk-shell .gt-container {
+    font-family: inherit;
+  }
+
+  .gitalk-shell .gt-container .gt-btn {
+    border-radius: 8px;
+  }
+
+  .gitalk-shell .gt-container .gt-header-textarea,
+  .gitalk-shell .gt-container .gt-comment-content {
+    border-radius: 8px;
+  }
+}
+
 /* Core theme configuration */
 @theme {
   /* Font families */

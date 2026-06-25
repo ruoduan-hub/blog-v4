@@ -1,22 +1,35 @@
 'use client'
 
-import { Comments as CommentsComponent } from 'pliny/comments'
 import { useState } from 'react'
+import { MessageCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { GitalkComments } from '@/components/comments/GitalkComments'
 import siteMetadata from '@/data/siteMetadata'
 
-export default function Comments({ slug }: { slug: string }) {
+export default function Comments({ slug, title }: { slug: string; title?: string }) {
   const [loadComments, setLoadComments] = useState(false)
+  const commentsProvider = (siteMetadata.comments as { provider?: string } | undefined)?.provider
 
-  if (!siteMetadata.comments?.provider) {
+  if (commentsProvider !== 'gitalk') {
     return null
   }
+
   return (
-    <>
+    <div className="not-prose">
       {loadComments ? (
-        <CommentsComponent commentsConfig={siteMetadata.comments} slug={slug} />
+        <GitalkComments slug={slug} title={title} />
       ) : (
-        <button onClick={() => setLoadComments(true)}>Load Comments</button>
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          onClick={() => setLoadComments(true)}
+          className="gap-2"
+        >
+          <MessageCircle className="size-4" aria-hidden="true" />
+          加载评论
+        </Button>
       )}
-    </>
+    </div>
   )
 }
