@@ -2,14 +2,20 @@ import Image from 'next/image'
 import {
   Code2,
   ExternalLink,
-  Heart,
   History,
   Mail,
   MapPin,
   Music2,
-  WalletCards,
 } from 'lucide-react'
 import Comments from '@/components/Comments'
+import { SupportPanel } from '@/components/SupportPanel'
+import ScrollReveal from '@/components/ScrollReveal'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { profile } from '@/data/profile'
@@ -166,59 +172,43 @@ function SiteHistory() {
 function MusicLibrary() {
   return (
     <section className="py-10">
-      <SectionTitle icon={Music2} eyebrow="Music" title="一些小曲儿" />
-      <div className="divide-y divide-gray-200 rounded-lg border border-gray-200 dark:divide-gray-800 dark:border-gray-800">
-        {profile.music.map((track) => (
-          <article
-            key={track.src}
-            className="grid gap-4 p-4 md:grid-cols-[1fr_320px] md:items-center"
-          >
+      <Accordion className="rounded-lg border border-gray-200 dark:border-gray-800">
+        <AccordionItem value="music">
+          <AccordionTrigger className="px-4 py-3">
             <div>
-              <h3 className="text-sm font-semibold text-gray-950 dark:text-gray-50">
-                {track.title}
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                {track.description}
+              <p className="mb-1 flex items-center gap-2 text-xs font-medium tracking-widest text-gray-500 uppercase dark:text-gray-400">
+                <Music2 className="size-3.5" aria-hidden="true" />
+                Music
               </p>
+              <h2 className="text-2xl font-semibold tracking-normal text-gray-950 dark:text-gray-50">
+                一些小曲儿
+              </h2>
             </div>
-            {/* 这些是个人翻唱音频，没有独立字幕文件。 */}
-            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <audio controls preload="none" src={track.src} className="w-full" />
-          </article>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function SupportPanel() {
-  return (
-    <section className="py-10">
-      <SectionTitle icon={WalletCards} eyebrow="Support" title="赞赏" />
-      <div className="grid gap-5 sm:grid-cols-2">
-        {[
-          { src: '/static/about/we_p.png', label: '微信' },
-          { src: '/static/about/al_p.png', label: '支付宝' },
-        ].map((item) => (
-          <div
-            key={item.src}
-            className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950"
-          >
-            <div className="relative aspect-square overflow-hidden rounded-md bg-gray-50 dark:bg-gray-900">
-              <Image
-                src={item.src}
-                alt={`${item.label}赞赏码`}
-                fill
-                className="object-contain p-3"
-              />
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="divide-y divide-gray-200 dark:divide-gray-800">
+              {profile.music.map((track) => (
+                <article
+                  key={track.src}
+                  className="grid gap-4 p-4 md:grid-cols-[1fr_320px] md:items-center"
+                >
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-950 dark:text-gray-50">
+                      {track.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                      {track.description}
+                    </p>
+                  </div>
+                  {/* 这些是个人翻唱音频，没有独立字幕文件。 */}
+                  {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+                  <audio controls preload="none" src={track.src} className="w-full" />
+                </article>
+              ))}
             </div>
-            <p className="mt-3 flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-              <Heart className="size-4" aria-hidden="true" />
-              {item.label}
-            </p>
-          </div>
-        ))}
-      </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </section>
   )
 }
@@ -226,15 +216,27 @@ function SupportPanel() {
 export function AboutPage() {
   return (
     <div className="mx-auto max-w-5xl">
-      <ProfileHero />
+      <ScrollReveal>
+        <ProfileHero />
+      </ScrollReveal>
       <Separator />
-      <SkillMatrix />
-      <SiteHistory />
-      <MusicLibrary />
-      <SupportPanel />
-      <section id="comment" className="py-10 text-center">
-        <Comments slug="about" title="关于我" />
-      </section>
+      <ScrollReveal delay={0.1}>
+        <SkillMatrix />
+      </ScrollReveal>
+      <ScrollReveal delay={0.1}>
+        <SiteHistory />
+      </ScrollReveal>
+      <ScrollReveal delay={0.1}>
+        <MusicLibrary />
+      </ScrollReveal>
+      <ScrollReveal delay={0.1}>
+        <SupportPanel />
+      </ScrollReveal>
+      <ScrollReveal delay={0.1}>
+        <section id="comment" className="py-10 text-center">
+          <Comments slug="about" title="关于我" />
+        </section>
+      </ScrollReveal>
     </div>
   )
 }

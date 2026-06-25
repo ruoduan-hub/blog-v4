@@ -4,11 +4,14 @@ import 'remark-github-blockquote-alert/alert.css'
 import 'gitalk/dist/gitalk.css'
 
 import { Space_Grotesk } from 'next/font/google'
+import { Suspense } from 'react'
 import { Analytics, AnalyticsConfig } from 'pliny/analytics'
 import { SearchProvider, SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
 import SectionContainer from '@/components/SectionContainer'
 import Footer from '@/components/Footer'
+import ProgressBar from '@/components/ProgressBar'
+import PageTransition from '@/components/PageTransition'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
@@ -99,9 +102,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <SectionContainer>
+            <Suspense fallback={null}>
+              <ProgressBar />
+            </Suspense>
             <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
               <Header />
-              <main className="mb-auto">{children}</main>
+              <main className="mb-auto">
+                <PageTransition>{children}</PageTransition>
+              </main>
             </SearchProvider>
             <Footer />
           </SectionContainer>

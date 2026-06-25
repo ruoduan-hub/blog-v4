@@ -1,15 +1,15 @@
 {
   "记": 38,
-  "ecma-javascript": 7,
-  "flutter": 3,
-  "code-tools": 3,
-  "python": 3,
   "react": 8,
-  "vue": 2,
-  "front-end": 2,
-  "web-other": 4,
   "nodejs": 7,
-  "数据库": 1,
   "shell": 2,
-  "life": 1
+  "flutter": 3,
+  "front-end": 2,
+  "life": 1,
+  "python": 3,
+  "web-other": 4,
+  "ecma-javascript": 7,
+  "code-tools": 3,
+  "vue": 2,
+  "数据库": 1
 }

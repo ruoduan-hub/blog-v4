@@ -255,9 +255,9 @@ Modify `data/siteMetadata.js`:
 
 ```js
 const siteMetadata = {
-  title: "Ruoduan' Blog",
-  author: 'Ruoduan',
-  headerTitle: 'Ruoduan Lab',
+  title: "Chad' Blog",
+  author: 'Chad',
+  headerTitle: 'Chad Lab',
   description: '若端的个人技术实验室，记录前端、工程化、Node.js、Python 和折腾实践。',
   language: 'zh-cn',
   theme: 'system',
@@ -293,10 +293,10 @@ Modify `data/authors/default.mdx`:
 
 ```mdx
 ---
-name: Ruoduan
+name: Chad
 avatar: /static/images/avatarImg.jpg
 occupation: 前端开发工程师
-company: Ruoduan Lab
+company: Chad Lab
 email: z.ruoduan@gmail.com
 github: https://github.com/ruoduan-hub
 layout: AuthorLayout

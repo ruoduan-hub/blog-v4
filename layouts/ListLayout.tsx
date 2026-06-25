@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
+import { motion } from 'motion/react'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
@@ -117,10 +118,20 @@ export default function ListLayout({
         </div>
         <ul>
           {!filteredBlogPosts.length && '没有找到文章。'}
-          {displayPosts.map((post) => {
+          {displayPosts.map((post, index) => {
             const { path, date, title, summary, tags } = post
             return (
-              <li key={path} className="py-4">
+              <motion.li
+                key={path}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: index * 0.04,
+                  duration: 0.3,
+                  ease: [0.25, 0.1, 0.25, 1] as const,
+                }}
+                className="py-4"
+              >
                 <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                   <dl>
                     <dt className="sr-only">发布时间</dt>
@@ -144,7 +155,7 @@ export default function ListLayout({
                     </div>
                   </div>
                 </article>
-              </li>
+              </motion.li>
             )
           })}
         </ul>

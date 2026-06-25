@@ -1,8 +1,8 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: "Ruoduan' Blog",
-  author: 'Ruoduan',
-  headerTitle: 'Ruoduan Lab',
+  title: "Chad' Blog",
+  author: 'Chad',
+  headerTitle: 'Chad Lab',
   description: '若端的个人技术实验室，记录前端、工程化、Node.js、Python 和折腾实践。',
   language: 'zh-cn',
   theme: 'system',

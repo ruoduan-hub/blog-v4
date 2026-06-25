@@ -7711,6 +7711,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion@npm:^12.42.0":
+  version: 12.42.0
+  resolution: "framer-motion@npm:12.42.0"
+  dependencies:
+    motion-dom: ^12.42.0
+    motion-utils: ^12.39.0
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: a839d3d18ccfafe3ace7913737132b1af4c357234a19113d2de96622f19c7f8ffc0edb05082af72aaa4b59748bd46fc7b5a246eaf2b1bc1821286629e26f062a
+  languageName: node
+  linkType: hard
+
 "fresh@npm:^2.0.0":
   version: 2.0.0
   resolution: "fresh@npm:2.0.0"
@@ -10949,6 +10971,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"motion-dom@npm:^12.42.0":
+  version: 12.42.0
+  resolution: "motion-dom@npm:12.42.0"
+  dependencies:
+    motion-utils: ^12.39.0
+  checksum: 4b8e14365f1acc0f6fbfb37bb41a17c110338cd886074404192211573c32f94591503812d402c99aebabd9868bfc49f73dcd654d1fbaed9f5602b4824a2d5343
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^12.39.0":
+  version: 12.39.0
+  resolution: "motion-utils@npm:12.39.0"
+  checksum: feb4f68fba3e2ed13bbbc193b2c786fe1d800b66c7a07df36de630428c856628e7e39e7791835d785419f6403f34d78c561feca96a4b14d1681ef79a561ebdd3
+  languageName: node
+  linkType: hard
+
+"motion@npm:^12.42.0":
+  version: 12.42.0
+  resolution: "motion@npm:12.42.0"
+  dependencies:
+    framer-motion: ^12.42.0
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: e5e5112c6bc51300d1e6a9f8ccd18937c46ad74061589e740153459c51aa984aeb7473d75fa0527af9baf907b3332650cf35a605cce87de46af53778839e06a7
+  languageName: node
+  linkType: hard
+
 "mrmime@npm:^2.0.0":
   version: 2.0.0
   resolution: "mrmime@npm:2.0.0"
@@ -14097,6 +14156,7 @@ __metadata:
     image-size: 2.0.1
     lint-staged: ^13.0.0
     lucide-react: ^1.21.0
+    motion: ^12.42.0
     next: 15.2.4
     next-contentlayer2: 0.5.5
     next-themes: ^0.4.6

@@ -1,12 +1,17 @@
+'use client'
+
+import { motion } from 'motion/react'
 import Image from './Image'
 import Link from './Link'
 
 const Card = ({ title, description, imgSrc, href }) => (
   <div className="md max-w-[544px] p-4 md:w-1/2">
-    <div
+    <motion.div
+      whileHover={{ y: -4, scale: 1.01 }}
+      transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] as const }}
       className={`${
         imgSrc && 'h-full'
-      } overflow-hidden rounded-md border-2 border-gray-200/60 dark:border-gray-700/60`}
+      } overflow-hidden rounded-md border-2 border-gray-200/60 transition-colors hover:border-primary-200 dark:border-gray-700/60 dark:hover:border-primary-800`}
     >
       {imgSrc &&
         (href ? (
@@ -49,7 +54,7 @@ const Card = ({ title, description, imgSrc, href }) => (
           </Link>
         )}
       </div>
-    </div>
+    </motion.div>
   </div>
 )
 

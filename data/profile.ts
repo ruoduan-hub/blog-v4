@@ -15,12 +15,12 @@ export type SiteStackNote = {
 }
 
 export const profile = {
-  name: 'Ruoduan',
+  name: 'Chad',
   handle: 'ruoduan-hub',
-  title: '前端开发工程师',
+  title: 'Web全栈开发工程师',
   email: 'z.ruoduan@gmail.com',
   location: 'China',
-  intro: '记录前端、工程化、Node.js、Python、部署和个人折腾的技术实验室。',
+  intro: '记录Web开发、工程化、Node.js、Python、部署和个人折腾的技术实验室。',
   quote: '我们逆水行舟，奋力向前，直至被推回到往昔岁月。',
   socialLinks: [
     { label: 'GitHub', href: 'https://github.com/ruoduan-hub' },
@@ -39,6 +39,7 @@ export const profile = {
     ops: ['Docker & Docker Compose', 'Linux Develop', 'MySQL', 'SQLite', 'MongoDB', 'Serverless'],
   },
   siteHistory: [
+    '2026年6月26日(Vibe Coding) ClaudeCode、Codex、接力完成BlogV4 —— Nextjs全新技术架构迁移',
     '2024年6月14日 use loremflickr.com | rm unsplash',
     '2024年03月08日 Comment use Gitalk（Leancloud 节点关闭数据丢失）',
     '2024年02月18日 更新 Avatar & Guitar Video',

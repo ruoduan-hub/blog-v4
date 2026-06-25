@@ -3,6 +3,7 @@ import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
+import { SupportPanel } from '@/components/SupportPanel'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
@@ -48,6 +49,7 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
                 <Comments slug={slug} title={title} />
               </div>
             )}
+            <SupportPanel />
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
                 {prev && prev.path && (
