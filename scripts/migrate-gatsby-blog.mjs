@@ -1,0 +1,182 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import matter from 'gray-matter'
+
+const BLOG_DIR = 'content/blog'
+const DEFAULT_SOURCE_ROOT = '/Users/ruoduan/dev/my-Gatsby-Blog'
+
+export function normalizeList(value) {
+  if (Array.isArray(value)) return value.map(String).filter(Boolean)
+  if (value === undefined || value === null || value === '') return []
+  return [String(value)]
+}
+
+function formatDate(value) {
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10)
+  }
+
+  return String(value || '')
+}
+
+function extractRawField(raw, field) {
+  const match = raw.match(new RegExp(`^${field}:\\s*(.+)$`, 'm'))
+  if (!match) return undefined
+
+  return match[1].trim().replace(/^['"]|['"]$/g, '')
+}
+
+function createSummary(body) {
+  return body
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/!\[[^\]]*]\([^)]+\)/g, '')
+    .replace(/\[[^\]]+]\([^)]+\)/g, '')
+    .replace(/[#>*_`~-]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 160)
+}
+
+export function normalizeFrontmatter(frontmatter, raw = '', body = '') {
+  const summary = frontmatter.description || frontmatter.summary || createSummary(body)
+
+  return {
+    title: String(frontmatter.title || ''),
+    date: extractRawField(raw, 'date') || formatDate(frontmatter.date),
+    tags: normalizeList(frontmatter.tags),
+    categories: normalizeList(frontmatter.categories),
+    draft: Boolean(frontmatter.draft ?? false),
+    summary: summary ? String(summary) : undefined,
+    authors: ['default'],
+  }
+}
+
+export function toMdxSafeBody(body) {
+  return body
+    .replace(/<br>/g, '<br />')
+    .replace(/frameborder=/g, 'frameBorder=')
+    .replace(/allowfullscreen=/g, 'allowFullScreen=')
+    .replace(/\smarginwidth="[^"]*"/g, '')
+    .replace(/\smarginheight="[^"]*"/g, '')
+    .replace(/src="\/\//g, 'src="https://')
+}
+
+function isRemoteAsset(assetPath) {
+  return /^(https?:)?\/\//.test(assetPath) || assetPath.startsWith('/') || assetPath.startsWith('#')
+}
+
+function cleanAssetPath(assetPath) {
+  return decodeURIComponent(assetPath)
+    .replace(/^.\//, '')
+    .replace(/\?.*$/, '')
+    .replace(/&amp;.*$/, '')
+}
+
+function rewriteOneAsset(assetPath, slug, assets) {
+  if (isRemoteAsset(assetPath)) return assetPath
+
+  const clean = cleanAssetPath(assetPath)
+  const fileName = path.basename(clean)
+  const sourceAsset = clean.includes('/') ? clean : `${slug}/${clean}`
+  assets.add(sourceAsset)
+
+  return `/static/blog/${slug}/${fileName}`
+}
+
+export function rewriteAssetRefs(body, slug) {
+  const assets = new Set()
+  const markdownImagePattern = /(!\[[^\]]*]\()([^)]+)(\))/g
+  const htmlImagePattern = /(<img\s+[^>]*src=["'])([^"']+)(["'][^>]*>)/g
+
+  const nextBody = body
+    .replace(markdownImagePattern, (_match, prefix, src, suffix) => {
+      return `${prefix}${rewriteOneAsset(src, slug, assets)}${suffix}`
+    })
+    .replace(htmlImagePattern, (_match, prefix, src, suffix) => {
+      return `${prefix}${rewriteOneAsset(src, slug, assets)}${suffix}`
+    })
+
+  return { body: nextBody, assets: [...assets] }
+}
+
+async function copyAsset({ sourceBlogDir, targetAssetDir, slug, asset }) {
+  const directSource = path.join(sourceBlogDir, asset)
+  const fallbackSource = path.join(sourceBlogDir, slug, path.basename(asset))
+  const targetAsset = path.join(targetAssetDir, slug, path.basename(asset))
+
+  try {
+    await fs.mkdir(path.dirname(targetAsset), { recursive: true })
+    await fs.copyFile(directSource, targetAsset)
+    return true
+  } catch {
+    try {
+      await fs.mkdir(path.dirname(targetAsset), { recursive: true })
+      await fs.copyFile(fallbackSource, targetAsset)
+      return true
+    } catch {
+      return false
+    }
+  }
+}
+
+export async function migrateAll({ sourceRoot, targetRoot, publicRoot, cleanTarget }) {
+  const sourceBlogDir = path.join(sourceRoot, BLOG_DIR)
+  const targetBlogDir = path.join(targetRoot, 'data/blog')
+  const targetAssetDir = path.join(publicRoot, 'static/blog')
+
+  if (cleanTarget) {
+    await fs.rm(targetBlogDir, { recursive: true, force: true })
+    await fs.rm(targetAssetDir, { recursive: true, force: true })
+  }
+
+  await fs.mkdir(targetBlogDir, { recursive: true })
+  await fs.mkdir(targetAssetDir, { recursive: true })
+
+  const entries = await fs.readdir(sourceBlogDir, { withFileTypes: true })
+  const markdownFiles = entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .map((entry) => entry.name)
+    .sort()
+
+  const result = { posts: 0, assets: 0, missingAssets: [] }
+
+  for (const fileName of markdownFiles) {
+    const slug = fileName.replace(/\.md$/, '')
+    const sourceFile = path.join(sourceBlogDir, fileName)
+    const raw = await fs.readFile(sourceFile, 'utf8')
+    const parsed = matter(raw)
+    const safeBody = toMdxSafeBody(parsed.content)
+    const rewritten = rewriteAssetRefs(safeBody, slug)
+    const frontmatter = normalizeFrontmatter(parsed.data, raw, parsed.content)
+    const output = matter.stringify(rewritten.body, frontmatter)
+
+    await fs.writeFile(path.join(targetBlogDir, `${slug}.mdx`), output)
+    result.posts += 1
+
+    for (const asset of rewritten.assets) {
+      const copied = await copyAsset({ sourceBlogDir, targetAssetDir, slug, asset })
+      if (copied) {
+        result.assets += 1
+      } else {
+        result.missingAssets.push(asset)
+      }
+    }
+  }
+
+  return result
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const sourceRoot = process.argv[2] || DEFAULT_SOURCE_ROOT
+  const targetRoot = process.cwd()
+  const publicRoot = path.join(targetRoot, 'public')
+  const result = await migrateAll({
+    sourceRoot,
+    targetRoot,
+    publicRoot,
+    cleanTarget: process.argv.includes('--clean-target'),
+  })
+
+  console.log(JSON.stringify(result, null, 2))
+}

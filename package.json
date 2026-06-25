@@ -9,6 +9,8 @@
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
+    "migrate:blog": "node scripts/migrate-gatsby-blog.mjs /Users/ruoduan/dev/my-Gatsby-Blog --clean-target",
+    "verify:migration": "node scripts/verify-blog-migration.mjs /Users/ruoduan/dev/my-Gatsby-Blog",
     "prepare": "husky"
   },
   "dependencies": {
