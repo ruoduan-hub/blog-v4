@@ -39,12 +39,13 @@ authors:
 
 ```
 
-典型解决方案就是`Context`
+典型的解决方案就是 `Context`。
 
-- 创建 context ：
+要创建一个 context，使用 `React.createContext`：
 
 `const ThemeContext = React.createContext('C_data');`
-hook 写法
+
+在 hook 写法中，通过 `useContext` 来消费 context：
 
 `const value = useContext(MyContext);`
 
@@ -183,11 +184,11 @@ or
 
 > 高阶组件（HOC）是 React 中用于复用组件逻辑的一种高级技巧。HOC 自身不是 React API 的一部分，它是一种基于 React 的组合特性而形成的设计模式。
 
-`上面👆是官方短解释 以下我通俗一点解释吧：`
+上面是官方短解释，我用通俗的话补充一下：
 
 想必大家都知道 JavaScript 的高阶函数吧。其实高阶组件就相当于一个高阶函数。即：高阶函数，就是函数中可以传入另一个函数作为参数的函数。
 
-- 在 React 中 => JSX 函数即组件 = 高阶组件是将组件转换为另一个组并返回
+在 React 中，JSX 函数即组件。高阶组件是将组件转换为另一个组件并返回。
 
 #### for example
 
@@ -355,11 +356,11 @@ ReactDOM.createPortal(child, container)
 
 第一个参数（child）是任何可渲染的 React 子元素，例如一个元素，字符串或 fragment。第二个参数（container）是一个 DOM 元素。
 
-ps: 一个 portal 的典型用例是当父组件有 overflow: hidden 或 z-index 样式时，但你需要子组件能够在视觉上“跳出”其容器。例如，对话框、悬浮卡以及提示框
+ps: 一个 portal 的典型用例是当父组件有 `overflow: hidden` 或 `z-index` 样式时，但你需要子组件能够在视觉上”跳出”其容器。例如，对话框、悬浮卡以及提示框。
 
-[参考这个示例: codepen ](https://codepen.io/gaearon/pen/yzMaBd?editors=1010)
+[参考这个示例: codepen](https://codepen.io/gaearon/pen/yzMaBd?editors=1010)
 
-HTML 和 CSS 属性我就不展示了 参照 如上 ⬆️ 链接 🔗，把 JS 拿出来讲一下
+HTML 和 CSS 属性就不展开了，参照上面链接，这里把 JS 拿出来讲一下：
 
 ```js
 // 根节点
@@ -505,44 +506,41 @@ function onRenderCallback(
 
 2.开发者可以通过 key prop 来暗示哪些子元素在不同的渲染下能保持稳定；
 
-这也就是我们在 React 中遍历`key`对于性能的重要性了，了解过 tree 算法我们都知道在树的子节点中 我们只要能确定 `child tree` 的 `key`（相当于权值 我就可以进行大幅优化）
+这也就是为什么在 React 遍历中，`key` 对于性能如此重要。
 
-- 元素对比
+如果你了解过 tree 算法就会知道，在树的子节点中，我们只要能确定 `child tree` 的 `key`（相当于权值），就可以进行大幅度的性能优化。
 
-  ```
-  分为：
-  ```
+**元素对比主要分为两种情况：**
 
-1. 比对不同类型的元素
+**1. 比对不同类型的元素**
 
-   2. 比对同一类型的元素
+当根节点类型发生变化时，旧的组件会被完全卸载，其状态也会被销毁。比如，当比对以下变更时：
 
-   ````
+```js
+<div>
+  <Counter />
+</div>
 
-   -  在根节点以下的组件也会被卸载，它们的状态会被销毁。比如，当比对以下更变时：
-   ​```js
-    <div>
-      <Counter />
-    </div>
+<span>
+  <Counter />
+</span>
+```
 
-    <span>
-      <Counter />
-    </span>
-   ````
+React 会销毁 Counter 组件并且重新装载一个新的组件。
 
-   React 会销毁 Counter 组件并且重新装载一个新的组件。
+**2. 比对同一类型的元素**
 
+当比对两个相同类型的 React 元素时，React 会保留 DOM 节点，仅比对并更新有改变的属性。比如：
 
-    - 当比对两个相同类型的 React 元素时，React 会保留 DOM 节点，仅比对及更新有改变的属性。比如：
+```js
+<div className="before" title="stuff" />
 
-    ```js
-    <div className="before" title="stuff" />
+<div className="after" title="stuff" />
+```
 
-    <div className="after" title="stuff" />
-    ```
-    通过比对这两个元素，React 知道只需要修改 DOM 元素上的 className 属性。
+通过比对这两个元素，React 知道只需要修改 DOM 元素上的 className 属性。
 
-- React 继续对子节点进行递归。
+接着 React 会继续对子节点进行递归比对。
 
 ##### Keys [敲黑板 面试问烂了的题目 下面我来解析下原理]
 

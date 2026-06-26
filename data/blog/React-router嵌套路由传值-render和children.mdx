@@ -54,7 +54,7 @@ let router = [
 ]
 ```
 
-- 我们想在 渲染 通过组件传值的方式父组件吧子组件的路由传过去从而实现渲染，传统的父子组件传值是用不了的
+我们想在渲染时通过组件传值的方式，让父组件把子组件的路由传过去从而实现嵌套渲染。传统的父子组件传值在这里是用不了的。
 
   - #### 错误示范：
 
@@ -87,12 +87,15 @@ let router = [
 ### 阐述：
 
 - 编程式导航，可以在一个组件中用 this.props.history.push("/path",&#123;name:"hellow"&#125;)，来进行传参，传过去的值在 props.location.state 中
-- Route 里面还有两个属性，render 和 children
+- Route 里面还有两个重要的属性：`render` 和 `children`
 
 ```js
--render是一个函数，语法：render={()=>{return <div></div>}}，只要你的路由匹配了，这个函数才会执行
--children也是一个函数，不管匹配不匹配，这个函数都会执行
--他们两个有个优先级关系，render的优先级总是高于children，是会覆盖children的
+// render是一个函数，语法：render={() => { return <div></div> }}
+// 只要路由匹配了，这个函数才会执行
+//
+// children也是一个函数，不管路由是否匹配，这个函数都会执行
+//
+// 他们之间有优先级关系：render 的优先级总是高于 children，会覆盖 children
 
  <Fragment>
     <h1>header</h1>

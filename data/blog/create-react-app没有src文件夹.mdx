@@ -16,9 +16,9 @@ authors:
 
 ## 缘起
 
-在使用 `npx create-react-app xx-app` 的时候创建项目后没有`scr` 文件夹,看了一下`package.json`也不对
+在使用 `npx create-react-app xx-app` 的时候创建项目后没有 `src` 文件夹，看了一下 `package.json` 也不对。
 
-然后顺势检查来一下 `nodejs` `npm` `yarn` 什么的都是正常的, 非常疑惑，然后去`github` 翻了翻
+然后顺势检查了一下 `nodejs` `npm` `yarn` 什么的都是正常的，非常疑惑，然后去 GitHub 翻了翻。
 
 ## 问题原因
 
@@ -32,15 +32,15 @@ authors:
 npm uninstall -g create-react-app
 ```
 
-&&
+同时也要：
 
 ```
 yarn global remove create-react-app
 ```
 
-然后使用 `旧的cli 测试一下` => `sudo create-react-app my-test`，如果执行了就说明 安装包还存在。—— 卸载就好
+然后使用旧的 cli 测试一下：`sudo create-react-app my-test`。如果还能执行，就说明安装包还存在，卸载就好。
 
-如果返回了 一个路径如`/ usr / local / bin / create-react-ap` 就使用 `rm -rf / usr / local / bin / create-react-app` 手动删除
+如果返回了一个路径如 `/usr/local/bin/create-react-app`，就使用 `rm -rf /usr/local/bin/create-react-app` 手动删除。
 
 ojbk ～
 

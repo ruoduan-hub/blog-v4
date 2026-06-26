@@ -38,13 +38,15 @@ authors:
 
 
 
-### Why  IUSR ？
+### Why IUSR？
 
-> IUSR用户组默认为iis创建网站默认的匿名用户。可以在创建网站的身份验证中看到.当然也可以到.
+> IUSR 用户组默认为 IIS 创建网站时默认的匿名用户，可以在网站的身份验证中看到。
 
-> 当IIS启动工作进程时，需要用户来标识进程，而IIS_IUSRS用户组成员ApplicationPoolIdentity就是默认的标. ApplicationPoolIdentity并不是指一个用户，而是所有程序池默认标识用户的统称。这些用户与程序池是一一对应的。例如，程序池DefaultAppPool的ApplicationPoolIdentity是用IISAPPPOOL\DefaultAppPool。
+> 当 IIS 启动工作进程时，需要用户来标识进程，而 IIS_IUSRS 用户组成员 ApplicationPoolIdentity 就是默认的标识。
 >
-> 因此，有了IIS_IUSRS用户组，管理应用程序池标识就变得简单多了，至少你不需要再为不同程序池下的站点设置不同的程序池标识用户权限
+> ApplicationPoolIdentity 并不是指一个用户，而是所有程序池默认标识用户的统称。这些用户与程序池是一一对应的。例如，程序池 DefaultAppPool 的 ApplicationPoolIdentity 用的是 IISAPPPOOL\DefaultAppPool。
+>
+> 因此，有了 IIS_IUSRS 用户组，管理应用程序池标识就变得简单多了，至少你不需要再为不同程序池下的站点设置不同的程序池标识用户权限。
 
 
 

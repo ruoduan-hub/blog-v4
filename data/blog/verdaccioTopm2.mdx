@@ -12,24 +12,19 @@ authors:
 ---
 
 
-
 ### 缘起
 
-> 没有什么特别的原因
-
-
+> 没有什么特别的原因，就是想搭建一个私有的 npm 包管理库。
 
 #### 环境准备
 
 - CentOS (Linux 系列)
-- yum | apt | wge ...
+- yum | apt | wget ...
 - Nodejs
 - npm
 - Verdaccio
 
-
-
-#### 1. 安装Nodejs & npm
+#### 1. 安装 Nodejs & npm
 
 ```shell
 yum install -y nodejs npm
@@ -67,33 +62,22 @@ warn --- config file  - /root/verdaccio/config.yaml
  warn --- http address - http://localhost:4873/ - verdaccio/5.13.0
 ```
 
-启动成功了 ！
+启动成功了！
 
-
-
-- 配置文件：`config file  - /root/verdaccio/config.yaml`
-
-- 访问路径 `http://localhost:4873/ `
+- 配置文件：`config file - /root/verdaccio/config.yaml`
+- 访问路径：`http://localhost:4873/`
 
 ---
 
-> 我们可以通过配置文件来改变默认端口
+> 我们可以通过配置文件来改变默认端口，具体参考文档 👉🏻 [link](https://verdaccio.org/docs/configuration/)
 
+这个时候我们已经可以访问到了：
 
-
-具体参考文档 👉🏻 [link](https://verdaccio.org/docs/configuration/)
-
-
-
-- 这个时候我们已经可以访问到了
-
-&lt;h5 id="jump1">初始页面&lt;/h5>
+<h5 id="jump1">初始页面</h5>
 
 ![img](https://i.postimg.cc/ZKbw758q/20220621144203.jpg)
 
-
-
-但是这时候 终端不能断，所以我们要守护进程
+但是这时候终端不能断，所以我们需要守护进程。
 
 
 
@@ -111,13 +95,9 @@ nohup verdaccio >/root/verdaccio/verdaccio.log 2>&1 &
 
 
 
-- ps： 还需要去开启 verdaccio 对应端口的安全组 
-
-
+- ps：还需要去开启 verdaccio 对应端口的安全组。
 
 ---
-
-
 
 #### 发布一个测试包
 
@@ -142,19 +122,10 @@ registry = "http://47.114.102.165:20010/"
 
 #### .npmrc 配置文件的优先级
 
-
-- 项目配置文件: /project/.npmrc
+- 项目配置文件：/project/.npmrc
 - 用户配置文件：~/.npmrc
 - 全局配置文件：$PREFIX/etc/npmrc
-- npm 内置配置文件 /path/to/npm/npmrc
-
-
-
-
-
-
-
-
+- npm 内置配置文件：/path/to/npm/npmrc
 
 #### 完
 

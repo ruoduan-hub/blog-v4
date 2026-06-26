@@ -22,7 +22,7 @@ authors:
 
 - 只要安装了 node 就安装了 npm
 
-- nm 也有版本概念
+- npm 也有版本概念
 
   ```javascript
   npm --version //查看版本号
@@ -60,11 +60,11 @@ aliases: un, unlink, remove, rm, r
 
 当使用官方 npm 源安装各种包比较慢的时候，建议修改 npm 源地址
 
-查看 npm 源地址，在终端输入以下命令
+查看 npm 源地址，在终端输入以下命令：
 
-npm config list
+`npm config list`
 
-会看到官方的 npm 源
+会看到官方的 npm 源：
 
 ```
 metrics-registry = "https://registry.npmjs.org/"
@@ -72,13 +72,13 @@ metrics-registry = "https://registry.npmjs.org/"
 
 国内常用的镜像地址如淘宝 npm：https://registry.npm.taobao.org/
 
-修改 registry 地址很简单，在终端输入
+修改 registry 地址很简单，在终端输入：
 
-npm set registry https://registry.npm.taobao.org/
+`npm set registry https://registry.npm.taobao.org/`
 
-如果有一天你肉身 FQ 到国外，用不上了，用 rm 命令删掉它
+如果有一天你肉身 FQ 到国外，用不上了，用 rm 命令删掉它：
 
-npm config rm registry
+`npm config rm registry`
 
 如果某一天你又被遣送回国了，还是得加上它……
 
@@ -88,7 +88,7 @@ npm config rm registry
 
 建议全局安装
 
-npm install nrm -g --save
+npm install nrm -g
 
 nrm 有一些默认配置，用 nrm ls 命令查看默认配置，带\*号即为当前使用的配置
 
