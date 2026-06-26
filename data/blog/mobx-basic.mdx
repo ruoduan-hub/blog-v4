@@ -42,8 +42,8 @@ authors:
 
 #### 准备工作
 
-因为本篇通篇使用 ES7 中的修饰器语法@，所以需要配置 bable，推荐使用
-当然你也可以使用 [decorators](https://cn.mobx.js.org/refguide/modifiers.html) 为参考
+因为本篇通篇使用 ES7 中的修饰器语法 `@`，所以需要配置 babel，推荐使用。
+当然你也可以使用 [decorators](https://cn.mobx.js.org/refguide/modifiers.html) 作为参考。
 
 1. 安装 `yarn add mobx mobx-react`
 2. 启用修饰器 babel 支持 ES7 中的修饰器语法@
@@ -120,7 +120,7 @@ export default newState
 - 一个计算 computed `total`
 - 然后 实例化一个对象 `newState` 并且导出了
 
-如果你用过 redux 那这里对应你来说 简直不要太简单，只不过 mobx 更加面向对象
+如果你用过 redux，那这里对你来说简直不要太简单，只不过 mobx 更加面向对象。
 
 ##### 组件中触发状态
 
@@ -200,17 +200,17 @@ export default Main
 
 - props 接收 父组件传过来的 `newState`
 
-当然如果你的组件签到太深，觉得 上面 2 中方式太麻烦你也可以使用 `react Context`来传递 newState，这里就不多做概述，[具体参考](https://react.docschina.org/docs/context.html)
+当然，如果你的组件嵌套太深，觉得上面两种方式太麻烦，也可以使用 `React Context` 来传递 `newState`，这里就不做展开了，[具体参考](https://react.docschina.org/docs/context.html)。
 
 #### 运行机制
 
 贴一张官方的图
 ![mobx-flow](/static/blog/mobx-basic/mobx-flow.png)
-可以发现 对比 redux mobx 的方式人更容易理解是使用
-面向对象的方式也让人用起来 不用写许多许多 render 感觉恶心
+可以发现，对比 redux，mobx 的方式让人更容易理解和使用。
+面向对象的方式用起来也不用写大量的模板代码，比较清爽。
 
 redux 教程链接 https://blog.csdn.net/ruoduan-hub/article/details/89522403
 
-最后 大家可以 clone 我的 deom 教程作为参考哦~
+最后，大家可以 clone 我的 demo 教程作为参考哦~
 https://github.com/ruoduan-hub/mobx-basic
 喜欢的 大爷点个 star 哦~

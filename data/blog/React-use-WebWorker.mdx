@@ -18,7 +18,8 @@ authors:
 
 
 ### 缘起
-> Web Worker 老生常谈了 —— 它允许你在主线程之外创建额外的线程来执行任务，例如处理文件，埋点轮询，如何在 React 中使用呢 ？
+
+> Web Worker 老生常谈了 —— 它允许你在主线程之外创建额外的线程来执行任务，例如处理文件、埋点轮询等等。那么，如何在 React 中使用呢？
 
 
 
@@ -58,8 +59,8 @@ self.onmessage = function(e: MessageEvent) {
 
 
 
-- `import.meta` 是一个内置在 ES 模块内部的对象，`import.meta.url` 表示一个模块在浏览器和 `Node.js` 的绝对路径。该特性属于 es2020 的一部分 
-- `new URL`传入 path & base 写入内存
+- `import.meta` 是一个内置在 ES 模块内部的对象，`import.meta.url` 表示一个模块在浏览器和 `Node.js` 的绝对路径。该特性属于 ES2020 的一部分。
+- `new URL(path, base)` 将路径和基础路径写入内存，供主线程引用。
 
 
 
@@ -100,7 +101,7 @@ or
 
 
 
->  为了保证 worker 中的代码被 babel 转译，可以让 `babel-loader` 在 `worker-loader` 之前执行。`ts-loader` 同理
+> 为了保证 worker 中的代码被 babel 转译，可以让 `babel-loader` 在 `worker-loader` 之前执行。`ts-loader` 同理。
 
 
 
@@ -115,7 +116,9 @@ const worker = new Worker(workPath);
 
 
 
-同样也是需要借助特定的 loader，类似于 `file-loader`。至于 `worker-loader` 则是将`new Worker(workPath)`的步骤内置到 loader 处理流程了，并导出一个函数，外面直接使用该函数即可创建指定的 Worker
+同样也是需要借助特定的 loader，类似于 `file-loader`。
+
+至于 `worker-loader`，则是将 `new Worker(workPath)` 的步骤内置到 loader 处理流程中，并导出一个函数。外面直接使用该函数即可创建指定的 Worker：
 
 
 
@@ -131,7 +134,7 @@ module.exports = function () {
 
 ### blobUrl
 
-> 还有一种方式就是 —— `worker.js` 的主函数转化为 `blobUrl` 导出，供主线程引用。该方法的好处是可以动态创建 worker
+> 还有一种方式：将 `worker.js` 的主函数转化为 `blobUrl` 导出，供主线程引用。该方法的好处是可以动态创建 worker。
 
 ```js
 // worker.js

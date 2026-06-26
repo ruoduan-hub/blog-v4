@@ -18,7 +18,7 @@ authors:
 
 ## 缘起
 
-> 在每次 `master` `bulid` 后都要去阿里云 后台手动刷新｜预热，此文章旨在优化发包繁琐步骤
+> 在每次 master 分支 build 后都要去阿里云后台手动刷新/预热，此文章旨在优化发包繁琐步骤。
 
 
 
@@ -30,9 +30,9 @@ authors:
 
 ### 1. pip install aliyun-python-sdk-cdn
 
-> ps：这个SDK 和 下面的 代码 是基于 python2 推荐2.7.16 
+> ps：这个 SDK 和下面的代码是基于 Python 2 的，推荐 2.7.16。
 >
-> Mac 的话 默认版本就是 python2
+> Mac 的话默认版本就是 Python 2。
 
 
 
@@ -276,7 +276,7 @@ python2 Refresh.py -i $AccessKey -k $AccessKeySecret -r ./cdn.lst -t $action
 echo "刷新完成"
 ```
 
-- 这只是个基本版 可以根据SDK参数来增加更多选项 参数如下⬇️
+- 这只是个基本版，可以根据 SDK 参数来增加更多选项，参数如下：
 
 
 
@@ -296,7 +296,7 @@ echo "刷新完成"
 
 ### 4. 修改 `package.json`来 执行 脚本
 
-> 在 script 中 增加 recdn
+> 在 scripts 中增加 recdn
 
 ```json
   "scripts": {

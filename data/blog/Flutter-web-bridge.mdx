@@ -24,7 +24,7 @@ authors:
 > 
 > 边缘业务：社区 平台 等 使用的 原生  
 
-- 虽然团队不大但是技术挺杂的，至于为什么要在flutter 中加入 混合开发是因为想通过微架构模式拆分业务，达到资源最大程度的复用；通过 Flutter 解决平台间的复用；微架构的 单页面应用程序解决 业务间的复用。这个暂且不谈，本期整理一下 flutter 中的 bridge 通信；
+- 虽然团队不大但技术挺杂的。至于为什么要在 Flutter 中引入混合开发 —— 是想通过微架构模式拆分业务，达到资源最大程度的复用：通过 Flutter 解决平台间的复用，通过微架构的单页面应用程序解决业务间的复用。这个暂且不谈，本期整理一下 Flutter 中的 bridge 通信。
 
 **架构图大致如下** 👇🏻
 
@@ -49,7 +49,7 @@ bridge 部分解决各端的
 ### APP 中 JS & dart call
 
 - APP 中
-> app中主要是通过 webview 来通信和混合开发的方式大同小异；都是 H5 & App 各自注册通过 postmessage | urlchange 来触发调用
+> app 中主要是通过 webview 来通信，和混合开发的方式大同小异：都是 H5 与 App 各自注册，通过 postMessage 或 URL change 来触发调用。
 
 **主要代码：**
 
@@ -245,8 +245,9 @@ export { onLogin }
 
 ---
 
-## summary
-> 之后我们可以在 xxBridge 中不断的继承 WeChat SDK、dingdingSDK、等等 和一些业务方法 通过 `rollup` 等一些工具 打包发布NPM包整合自己的工具
+## 总结
+
+之后我们可以在 xxBridge 中不断集成 WeChat SDK、DingTalk SDK 等第三方能力，以及一些业务方法。通过 `rollup` 等工具打包发布 NPM 包，整合自己的工具链。
 
 
 

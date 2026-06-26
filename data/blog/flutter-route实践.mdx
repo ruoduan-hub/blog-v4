@@ -16,7 +16,7 @@ authors:
 flutter 路由通常有三种方式：👇🏻
 
 
-### Navigator.push
+## Navigator.push
 
 ```dart
 Navigator.push( context,
@@ -30,7 +30,7 @@ Navigator.push( context,
 - **Navigator**
 - **MaterialPageRoute**
 
-#### Navigator
+### Navigator
 > 第一种方法 ✅
 
 > `Navigator`是一个路由管理的组件，它提供了打开和退出路由页方法。`Navigator`通过一个栈来管理活动路由集合。通常当前屏幕显示的页面就是栈顶的路由。`Navigator`提供了一系列方法来管理路由栈，在此我们只介绍其最常用的两个方法
@@ -47,7 +47,7 @@ Navigator.push( context,
 
 <br />
 
-#### MaterialPageRoute
+### MaterialPageRoute
 > `MaterialPageRoute`继承自`PageRoute`类，`PageRoute`类是一个抽象类，表示占有整个屏幕空间的一个模态路由页面，它还定义了路由构建及切换时过渡动画的相关接口及属性。`MaterialPageRoute` 是Material组件库提供的组件，它可以针对不同平台，实现与平台页面切换动画风格一致的路由切换动画：
 
 - 入参
@@ -70,7 +70,7 @@ MaterialPageRoute({
 
 ---
 
-### RoutesMap
+## RoutesMap
 > 第二种方法 ✅
 
 > 顾名思义 `路由表`的方式，和我们`Vue`\`React` 很相似
@@ -106,7 +106,7 @@ onPressed: () {
 ```
 
 
-### onGenerateRoute
+## onGenerateRoute
 > 第三种方法✅
 > 这个方式，我们称之为`钩子路由`，其实就是在执行页面跳转的时候执行一个方法来判断 类似 `拦截器`的意思
 
@@ -152,7 +152,7 @@ Route<dynamic> Function(RouteSettings settings)
 > 有了这个方法我们可以有很选择，当然也可以和 `RouteMap` 结合起来做，因为只有路径匹配不到路由表的时候才会执行 `onGenerateRoute` 匹配
 
 
-### 传参
+## 传参
 > 有了路由跳转当然少不了传参 🤖
 
 `if`
@@ -198,7 +198,7 @@ class Page2 extends StatelessWidget {
 }
 ```
 
-### 小结
+## 小结
 > 上面三种方式，使用命名路由是最推荐的，因为:
 
 1. 语义明确
@@ -207,7 +207,7 @@ class Page2 extends StatelessWidget {
 
 ---
 
-### demo code
+## demo code
 > 完整的代码
 
 main.dart

@@ -15,12 +15,14 @@ authors:
 ---
 
 ### 缘起
-> chmod 修改项目文件夹的权限以后，git status 发生了大量变化的文件。原因是 Git 不仅能够管理文件的版本，而且能够管理对文件的访问权限。
-> Git对文件的访问权限的管理与配置选项core.filemode有关。core.filemode选项默认true，即区分文件的执行权限，校验Git的Index中和工作目录中的文件权限。
+> `chmod` 修改项目文件夹的权限以后，`git status` 发生了大量变化的文件。
+> 原因是 Git 不仅能够管理文件的版本，而且能够管理对文件的访问权限。
+> Git 对文件的访问权限的管理与配置选项 `core.filemode` 有关。`core.filemode` 选项默认 `true`，即区分文件的执行权限，校验 Git 的 Index 中和工作目录中的文件权限。
 
-- 关闭git权限校验
+### 解决方法
+
+关闭 git 权限校验即可：
 
 ```shell
-  git config core.fileMode false
+git config core.fileMode false
 ```
-~~~

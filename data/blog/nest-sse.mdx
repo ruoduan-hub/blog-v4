@@ -18,7 +18,7 @@ authors:
 
 
 ## 缘起
-> 一些涉及到 “实时更新”的场景,使用 "websocket" | “SSE”，老生常谈的问题了，这篇文章会用一个通俗、简单的例子，来解释在 Nodejs 框架 "Nest" 中使用 SSE 技术完成状态同步。、
+> 一些涉及到 "实时更新" 的场景，使用 "websocket" | "SSE"，老生常谈的问题了。这篇文章会用一个通俗、简单的例子，来解释在 Nodejs 框架 "Nest" 中使用 SSE 技术完成状态同步。
 
 
 
@@ -59,7 +59,9 @@ Connection: keep-alive
 1. postLocation，接口负责推送当前编辑的位置
 2. getLocation， 获取最新的位置
 
-这种情况下，可以实现的方式很多 比较常见的："轮询"、"webSocket"、"SSE"; 我们可以理解 "切换单元格"是一件很频繁的事情，只有在状态更新的时候再去触发推送，避免不必要的带宽浪费； 且 `getLocation` 不需要 “双向通信” 只需要实时的获取数据就可以了，相信你们心里已经有答案了 那就是 `SSE`.
+这种情况下，可以实现的方式很多，比较常见的有："轮询"、"webSocket"、"SSE"。
+
+我们可以理解 "切换单元格" 是一件很频繁的事情，只有在状态更新的时候再去触发推送，才能避免不必要的带宽浪费。而且 `getLocation` 不需要 "双向通信"，只需要实时获取数据就可以了 -- 相信你们心里已经有答案了，那就是 `SSE`。
 
 
 ### 正文
@@ -134,7 +136,7 @@ export class LocationtController {
 
 ```
 
-打开客户端，链接 SSE 一开始一开始我们接受到的是`[]`, 请求下 post请求 传递一个 
+打开客户端，链接 SSE，一开始我们接收到的是 `[]`。请求下 post 请求，传递一个
 ```
 {
     "x": 2,
@@ -152,7 +154,7 @@ export class LocationtController {
 
 数据 从 [] => [&#123;"x":2,"y":2&#125;]
 
-但是主要为什么 SSE 请求那么多，而且每次都是 `ID: 1` ？
+但是为什么 SSE 请求那么多，而且每次都是 `ID: 1` 呢？
 
 这时候我们来看 `Observable<MessageEvent>` 的解释
 
@@ -201,7 +203,7 @@ Server-Sent Events routes must return an `Observable` stream.
 
 大致理解下来就是在使用 `SSE` 的过程中，是通过 `stream` 也就是浏来通信的，ID是用于客户端的状态跟踪，通过为每个事件指定唯一的标识符。
 
-这下哦我们可以理解了，因为我们每次返回静态数据所以 每次都会创建一个新的 `stream` 且 ID 也默认每次都是第一个了
+这下我们就可以理解了：因为我们每次返回静态数据，所以每次都会创建一个新的 `stream`，且 ID 也默认每次都是第一个。
 
 - 接下来我们要把代码改写一下解决：
 1. SSE 多个的问题
@@ -245,6 +247,6 @@ export class LocationtController {
 
 ![image.png](https://s2.loli.net/2023/07/26/ZWIUrDigcQEBHdy.png)
 
-以上代码，只不过是通过一个简单的例子来 更好的理解 SSE，实际上我们的 语雀、金山文档不可能把数据存在 class 里面，也不会那么简单的实现。
+以上代码，是通过一个简单的例子来更好地理解 SSE 的工作原理。实际上，语雀、金山文档这样的产品不可能把数据存在 class 里面，实现也远比这复杂。
 
 [Demo 完整代码](https://github.com/ruoduan-hub/nest-demo-sse)

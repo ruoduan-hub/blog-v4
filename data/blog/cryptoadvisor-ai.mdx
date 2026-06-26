@@ -1,0 +1,215 @@
+---
+title: CryptoAdvisor AI — 纯前端 AI 加密投资分析工具，没有后端的 SPA 到底能做什么
+date: '2026-06-27'
+tags:
+  - 开源
+  - Next.js
+  - AI
+  - Crypto
+categories:
+  - 开源
+draft: false
+summary: >-
+  纯前端 + AI + 8 个公开数据源 = 一个完整的加密投资分析助手。不用注册、不用充值、没有服务端，所有数据留在你的浏览器。基于 Next.js 16 + Anthropic Claude + CCXT，桌面和移动端都能用。
+authors:
+  - default
+---
+
+## 灵感
+
+> 现在的加密交易工具，两头极端：要么是交易所那些只有 K 线和挂单的操作台（数据太窄），要么是 Glassnode / Dune 那种链上分析平台（门槛太高）。普通用户想快速知道「这个币现在能不能碰」还得自己翻 CoinMarketCap、看新闻、查资金费率，来回切七八个标签页。
+
+能不能把这堆事压缩到一个页面里？
+
+**选币 → 看数据 → AI 出报告 → 确认下单**，四步走完，而且全程你的密钥不离开浏览器。
+
+这就是 CryptoAdvisor AI。
+
+---
+
+## 看一眼
+
+<div style={{ width: '67%', margin: '0 auto' }}>
+
+![CryptoAdvisor AI 桌面端](/static/blog/cryptoadvisor-ai/table-iMac.png)
+
+</div>
+
+<div style={{ width: '33%', margin: '0 auto' }}>
+
+![CryptoAdvisor AI 移动端](/static/blog/cryptoadvisor-ai/mobile-iPhone-X.png)
+
+</div>
+
+桌面和移动端都适配了，数据面板、分析报告、下单区域三栏一目了然。
+
+---
+
+## 四步工作流
+
+### 1. 选币
+
+搜索并选择要分析的交易对，覆盖主流 CEX 的上百个币种。
+
+### 2. 配置
+
+设定风险偏好（保守 / 平衡 / 激进）、投资周期、预算金额。这些参数会一并送给 AI，影响报告中仓位和止损的建议。
+
+### 3. 分析（最核心的一步）
+
+点击分析后，系统同时做两件事：
+
+- **聚合数据** — 从 8 个公开 API 拉实时行情、资金费率、链上数据、市场新闻、恐惧贪婪指数
+- **AI 出报告** — 所有数据交给 Claude，SSE 流式输出分析结果
+
+报告覆盖四个维度：
+
+| 维度 | 覆盖内容 |
+| --- | --- |
+| 技术面 | 当前价格位置、支撑/阻力、趋势判断 |
+| 基本面 | 市值、TVL、链上活跃度 |
+| 情绪面 | 恐惧贪婪指数、资金费率方向、新闻情绪 |
+| 风险 | 建议入场价、止损位、止盈位、仓位比例 |
+
+> 流式输出让整个过程很有"对话感" — 你看着报告逐行生成，而不是等 15 秒然后刷出一大段。
+
+### 4. 下单
+
+AI 自动根据分析结果生成一个标准 CCXT 订单：
+
+```json
+{
+  "symbol": "BTC/USDT",
+  "type": "limit",
+  "side": "buy",
+  "amount": 0.01,
+  "price": 65000,
+  "stopLoss": 64000,
+  "takeProfit": 67000
+}
+```
+
+你在 Order Preview 面板逐项确认，满意了再点执行。**机器出方案，人做决定。**
+
+---
+
+## 8 个数据源，全部公开
+
+所有数据来自公开 API，不需要注册任何第三方 Key。通过 Next.js `rewrites` 代理，CORS 不是问题。
+
+| 数据源 | 提供什么 | 刷新间隔 |
+| --- | --- | --- |
+| **CCXT** | 实时 ticker、24h OHLC | 1 min |
+| **Binance Futures** | 资金费率(8h)、未平仓合约 | 1 min |
+| **CoinPaprika** | 币种市值、补充价格 | 5 min |
+| **CoinGecko** | 全球总市值、BTC/ETH 主导率 | 5 min |
+| **mempool.space** | BTC 链上 mempool、推荐费率 | 2 min |
+| **CoinDesk** | 加密市场新闻 | 10 min |
+| **Alternative.me** | 恐惧贪婪指数(0-100) | 15 min |
+| **DeFiLlama** | 以太坊 DeFi TVL | 15 min |
+
+---
+
+## 为什么"没有后端"反而是卖点
+
+这是整个项目最核心的设计选择。
+
+传统做法：你的 API Key 放在 `.env.local`，服务端代你调用 AI 和交易所。问题是 — **信任**。你怎么确定服务端没记录你的密钥？没截留你的交易数据？
+
+CryptoAdvisor AI 的办法是**根本不给服务端机会**：
+
+- 交易所 API Key → `sessionStorage`，关标签页即销毁
+- AI API Key → `sessionStorage`，同样只活一次
+- 所有外部请求通过 Next.js `rewrites` 代理，但密钥不经过服务端
+- 分析历史存 IndexedDB（浏览器本地数据库）
+- AI 报告渲染用 `react-markdown`，没用 `dangerouslySetInnerHTML`
+
+```
+┌─ 你的浏览器 ─────────────────────────┐
+│                                       │
+│  sessionStorage     IndexedDB         │
+│  ├─ AI Key          ├─ 分析历史      │
+│  └─ Exchange Key    └─ 缓存数据      │
+│                                       │
+│  关闭标签页 = 密钥永久清除             │
+└───────────────────────────────────────┘
+```
+
+> 开放代码的好处就一个：安全模型可以审计，不用信我，自己看。
+
+---
+
+## 架构一览
+
+```
+Browser / Electron
+    │
+    ├─ React 19 · Next.js App Router
+    │   ├─ CryptoSelector      选币
+    │   ├─ InvestmentConfig    配置
+    │   ├─ MarketDataPanel     数据面板
+    │   ├─ AnalysisReport      AI 报告（流式 Markdown）
+    │   ├─ OrderPreview        CCXT 订单预览 + 执行
+    │   └─ HistoryPanel        历史回放
+    │
+    ├─ API Routes (Next.js)
+    │   ├─ /api/analyze        SSE 流式 AI 分析
+    │   ├─ /api/market         CCXT 行情
+    │   ├─ /api/markets        可用交易对
+    │   └─ /api/order          下单
+    │
+    └─ Proxy (rewrites)
+        ├─ coinpaprika, alternative, llama
+        ├─ coindesk, coingecko, binfutures
+        └─ mempool
+```
+
+缓存策略通过 module-level `Map` + TTL 实现，分三级管理：
+
+| 级别 | TTL | 数据 |
+| --- | --- | --- |
+| 高频 | 1 min | 实时价格、资金费率 |
+| 中频 | 2-5 min | 链上数据、市场概况 |
+| 低频 | 10-15 min | 新闻、恐惧贪婪指数 |
+
+---
+
+## 技术栈
+
+| 层级 | 选型 |
+| --- | --- |
+| 框架 | Next.js 16 (App Router) |
+| 语言 | TypeScript (strict) |
+| 样式 | Tailwind CSS 4 |
+| AI | Anthropic Claude (SSE streaming) |
+| 交易所 SDK | CCXT |
+| 本地存储 | IndexedDB (`idb`) |
+| 桌面端 | Electron + electron-builder |
+| 图标 | Lucide React |
+| 字体 | Orbitron / JetBrains Mono |
+| 国际化 | 中英双语，Cookie + SSR，零 hydration 闪烁 |
+
+---
+
+## 写给自己也算给用户：历史回放
+
+每次分析自动存入 IndexedDB。你可以随时回去看以前的报告 — AI 当时的判断是什么、止损建议多少、回头看看准不准。
+
+> 大概率不准。但没关系，有一份记录在，至少说明你认真想过。
+
+这个功能还有一个用处：拿历史参数一键重跑分析，看看同样的配置在今天的市场环境下 AI 会给出什么不同的结论。
+
+---
+
+## 最后
+
+CryptoAdvisor AI 不会自动替你下单，也不会保证盈利。它就是一套工具链 — 聚合数据、让 AI 出分析、你来做判断、它帮你执行。
+
+"纯前端"这件事既是限制也是亮点。没有后端意味着每一步都要在浏览器里完成，从多源数据聚合、到 AI 调用、到 CCXT 下单。做起来比有后端麻烦得多，但结果是你获得的隐私和可信。
+
+- [GitHub 仓库](https://github.com/ruoduan-hub/ai_trade_analyze_bot)
+- MIT 开源协议
+
+---
+
+> AI × Crypto 的交汇点还有很多有意思的事情可做。CryptoAdvisor AI 只是一个开始。

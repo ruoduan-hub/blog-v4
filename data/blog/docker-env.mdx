@@ -19,7 +19,7 @@ authors:
 
 ### 缘起
 
-> 发现使用 当前时间 `format('YYYY-MM-DD HH:mm:ss')` 的时候本地运行时正确的，服务器Docker 镜像中调用晚八个小时，进去 `exec bash`  `date` 打印时间 发现镜像中默认时区是 UST
+> 发现使用当前时间 `format('YYYY-MM-DD HH:mm:ss')` 的时候，本地运行时是正确的，但服务器 Docker 镜像中调用晚了八个小时。进去 `exec bash` 执行 `date` 打印时间，发现镜像中默认时区是 UTC。
 
 解决方案：👇🏻
 

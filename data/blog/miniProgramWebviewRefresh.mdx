@@ -16,21 +16,17 @@ authors:
 
 
 
-### 缘起
+## 缘起
 
-在微信小程序IOS 某些版本中(我遇到的是 17^ )的 WebView中，回退并不会触发重新渲染；
+在微信小程序 IOS 某些版本中（我遇到的是 17^）的 WebView 里，回退并不会触发重新渲染。无论是使用 `pageshow` 监听还是 effect，都没用。
 
-无论是使用 `pageshow` 监听还是，effect 都没用；
-
-捣鼓了各种方式 发现嵌套 在 `iframe` 中可以，但是这样的方式过于复杂和相当于 嵌套了三层：
-
-微信 WebView => iframe => Project A => ProjectB，交互起来过于麻烦。
+捣鼓了各种方式后发现，嵌套 `iframe` 确实可以解决，但这样过于复杂，相当于嵌套了三层：微信 WebView => iframe => Project A => ProjectB，交互起来过于麻烦。
 
 
 
-### Solve
+## Solve
 
-> 经过多次尝试，发现就是微信小程序在 IOS特定系统中，back 会缓存当前页面，回退根本不会触发渲染；直接配置在该项目的 Nginx 中配置缓存 `Cache-Control`  指定浏览器 no-cache👇
+经过多次尝试，发现微信小程序在 iOS 特定系统中，back 会缓存当前页面，回退根本不会触发渲染。解决方式是直接在该项目的 Nginx 中配置 `Cache-Control`，指定浏览器 no-cache：
 
 ```yaml
 # Nginx Config
