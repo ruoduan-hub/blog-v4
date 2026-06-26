@@ -16,11 +16,11 @@ authors:
 
 #### async/await
 
-> async 其实是 ES7 的才有的关键字，放在这里说，其实是和我们前面所说的 Promise，Generator 有很大关联的。async 的意思是"异步"，顾名思义是有关异步操作有关的关键字。
-> 而且 async/await 是 Generator yield 的语法糖
-> 具体参考 阮老师的 es6 入门
+> async 其实是 ES7 才有的关键字，放在这里说，其实是和我们前面所说的 Promise、Generator 有很大关联的。async 的意思是"异步"，顾名思义是和异步操作有关的关键字。而且 async/await 是 Generator 中 yield 的语法糖。
+>
+> 具体参考 阮老师的 ES6 入门。
 
-- 我们这里就展示一下 async/await 的实际作用
+我们这里就展示一下 async/await 的实际作用。
 
 #### async
 
@@ -31,8 +31,9 @@ const helloFn = async () => {
 console.log(helloFn) //Promise {<resolved>: "helloAsync"}
 ```
 
-可以看到 经过 async 包装后的函数 返回一个 promise 对象
-既然是返回的 Promise 对象，我们就是用 then 方法来处理。
+可以看到，经过 async 包装后的函数返回一个 Promise 对象。
+
+既然是返回的 Promise 对象，我们就用 then 方法来处理。
 
 ```js
 const helloFn = async () => {
@@ -43,11 +44,11 @@ helloFn().then(s => {
 })
 ```
 
-> 是不是很简单，就是一个 promise 而已是如何实现 异步控制的呢？
+> 是不是很简单？就是一个 Promise 而已，它是如何实现异步控制的呢？
 
 #### await
 
-> 在 Generator 中 yield 关键字，yield 关键字只能使用在 Generator 函数中，同样，await 关键字也不能单独使用，是需要使用在 async 方法中。 await 字面意思是"等待"，那它是在等什么呢？它是在等待后面表达式的执行结果。
+> 在 Generator 中，yield 关键字只能使用在 Generator 函数中。同样，await 关键字也不能单独使用，需要使用在 async 方法中。await 字面意思是"等待"，那它是在等什么呢？它是在等待后面表达式的执行结果。
 
 - 请看下面这段示例代码，我们用定时器来模拟异步的情况
 
@@ -69,18 +70,22 @@ helloAsync()
 //helloAsync
 ```
 
-- 我们来分析下这段代码
+我们来分析下这段代码：
 
-  1、testAwait()方法中 new 一个 Promise 对象返回，promise 对象中用 setTimeout 模拟一个异步过程，即 1s 后打印"testAwait"。
+1. `testAwait()` 方法中 new 一个 Promise 对象返回，Promise 对象中用 setTimeout 模拟一个异步过程，即 1s 后打印 "testAwait"。
 
-  2、helloAsync()方法中，await testAwait(),表示将阻塞这里，等待 testAwait 这个异步方法执行并返回结果后，才继续下面的代码。
+2. `helloAsync()` 方法中，`await testAwait()` 表示将阻塞在这里，等待 testAwait 这个异步方法执行并返回结果后，才继续下面的代码。
 
-  执行下，1s 后打印了下面的日志。
-  `testAwait`
-  `helloAsync`
-  到此，是不是理解了 await 的作用，就是阻塞主函数的执行，直到后面的 Promise 函数返回结果。
+执行一下，1s 后打印了下面的日志：
 
-**await 后面只能 是 Promise 对象么？答案是否定的，可以是字符串，布尔值，数值以及普通函数**。
+```
+testAwait
+helloAsync
+```
+
+到此，是不是理解了 await 的作用？就是阻塞主函数的执行，直到后面的 Promise 函数返回结果。
+
+**await 后面只能是 Promise 对象么？答案是否定的 -- 可以是字符串、布尔值、数值以及普通函数。**
 
 ```js
 function testAwait() {
@@ -99,11 +104,11 @@ helloAsync()
   `helloAsync`
   `testAwait`
 
-- 方法没有报错，说明 await 后面是支持非 Promise 函数的，但是执行的结果是不一样的，所以 await 针对所跟的表达式不同，有两种处理方式：
+方法没有报错，说明 await 后面是支持非 Promise 函数的，但执行的结果是不一样的。await 针对所跟的表达式不同，有两种处理方式：
 
-  1、对于 Promise 对象，await 会阻塞主函数的执行，等待 Promise 对象 resolve，然后得到 resolve 的值，作为 await 表达式的运算结果，然后继续执行主函数接下来的代码。
+1. 对于 Promise 对象，await 会阻塞主函数的执行，等待 Promise 对象 resolve，然后得到 resolve 的值作为 await 表达式的运算结果，再继续执行主函数接下来的代码。
 
-  2、对于非 Promise 对象，await 等待函数或者直接量的返回，而不是等待其执行结果。
+2. 对于非 Promise 对象，await 等待函数或者直接量的返回，而不是等待其执行结果。
 
 #### 小栗子
 
@@ -147,8 +152,7 @@ const mm = async () => {
 mm()
 ```
 
-这个栗子我们可以看出 定时器的时间依次是 3 2 1，但是我们想要对他们做异步控制，执行 1 2 3
+这个例子我们可以看出，三个定时器的时间依次是 2000ms、1000ms、500ms，如果不安顺序执行会先输出 3、2、1。但我们想要对它们做异步控制，按 1、2、3 执行：
 
-1、首先每个制作异步过程封装成 Promise 对象。
-
-2、利用 await 阻塞原理，实现每个制作的顺序执行。
+1. 首先把每个异步过程封装成 Promise 对象。
+2. 利用 await 阻塞原理，实现按顺序执行。

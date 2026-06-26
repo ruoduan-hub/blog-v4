@@ -22,7 +22,8 @@ authors:
 
 
 ## 缘起
-> 在使用 `npm` 包的过程中有有一些特性不支持，可以通过修改源码来完成，尽管已经可以通过 Issues | pr ; 但是毕竟开源社区审核较慢，这时候就可以通过 `patch-package `来完成
+> 在使用 `npm` 包的过程中有一些特性不支持，可以通过修改源码来完成。
+> 尽管已经可以通过 Issues | PR 来解决，但开源社区审核较慢，这时候就可以通过 `patch-package` 来快速完成。
 
 - 当然其他方法也有很多种，patch-package 对比 其他方法 算是最优解吧
 
@@ -40,13 +41,14 @@ authors:
 
 > ps：这里有一个坑，就是使用 yarn 的话要多装一个 `postinstall-postinstall` [Why use postinstall-postinstall with Yarn](https://github.com/ds300/patch-package#why-use-postinstall-postinstall-with-yarn)
 
-大概意思就是说：大多数情况下在npm包 安装和卸载的时候 `patch-package ` 会通过 diff 去替换包内的源码，但是 yarn 只会在 安装的时候执行，卸载的时候不会去执行，使用 `postinstall-postinstall` 后确保卸载的时候也会执行.
+大概意思就是说：大多数情况下在 npm 包安装和卸载的时候，`patch-package` 会通过 diff 去替换包内的源码。
+但是 yarn 只会在安装的时候执行，卸载的时候不会去执行。使用 `postinstall-postinstall` 后可以确保卸载的时候也会执行。
 
 
 ## 生成源码
 > 以 antd 为例子 🌰
 
-我们首先去 fork antd 的代码 拉到本地后，我们修改源码，跑过单元测试等等.
+我们首先去 fork antd 的代码拉到本地后，修改源码，跑过单元测试等等。
 
 - 等待打包 `yarn build`
 
@@ -86,7 +88,7 @@ npx patch-package package-name（npm版本 > 5.2）
 
 **注意：**
 
-> patch-package 是锁定版本的，所以在 `package.json` 最后是把版本锁定到当前 `patchinstall` 的这个版本
+> `patch-package` 是锁定版本的，所以在 `package.json` 里最好把版本锁定到当前打了补丁的这个版本。
 
 
 ### other 

@@ -8,7 +8,7 @@ categories:
 draft: false
 summary: >-
   ES2018 异步迭代 在 async/await 的某些时刻，你可能尝试在同步循环中调用异步函数。例如：
-  这段代码是不会正常执行的，循环本身依旧保持同步，并在在内部异步函数之前全部调用完成。 ES2018 引入异步迭代器（asynchronous
+  这段代码是不会正常执行的，循环本身依旧保持同步，并在内部异步函数之前全部调用完成。 ES2018 引入异步迭代器（asynchronous
   iterators），这就像常规迭代器，除了next()方法返回一个P
 authors:
   - default
@@ -29,7 +29,7 @@ async function process(array) {
 }
 ```
 
-这段代码是不会正常执行的，循环本身依旧保持同步，并在在内部异步函数之前全部调用完成。
+这段代码是不会正常执行的，循环本身依旧保持同步，并在内部异步函数之前全部调用完成。
 
 ES2018 引入异步迭代器（asynchronous iterators），这就像常规迭代器，除了`next()`方法返回一个`Promise`。因此`await`可以和`for...of`循环一起使用，以串行的方式运行异步操作。例如：
 
@@ -61,7 +61,7 @@ function doSomething() {
 ```
 
 - ### Rest/Spread 属性
-  ES2015 引入了 Rest 参数和扩展运算符。三个点（...）仅用于数组。Rest 参数语法允许我们将一个布丁数量的参数表示为一个数组。
+  ES2015 引入了 Rest 参数和扩展运算符。三个点（...）仅用于数组。Rest 参数语法允许我们将一个不定数量的参数表示为一个数组。
 
 ```js
 restParam(1, 2, 3, 4, 5)
@@ -146,16 +146,6 @@ const reDate = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/,
 
 任何匹配失败的命名组都将返回 undefined。
 命名捕获也可以使用在 replace()方法中。例如将日期转换为美国的 MM-DD-YYYY 格式：
-
-```js
-const reDate = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/,
-  d = "2018-04-30",
-  usDate = d.replace(reDate, "$<month>-$<day>-$<year>")
-```
-
-任何匹配失败的命名组都将返回`undefined`。
-
-命名捕获也可以使用在`replace()`方法中。例如将日期转换为美国的 `MM-DD-YYYY` 格式：
 
 ```js
 const reDate = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/,

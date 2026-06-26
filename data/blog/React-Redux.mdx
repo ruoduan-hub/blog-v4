@@ -37,7 +37,9 @@ authors:
 > 为了解决这个问题，2014 年 Facebook 提出了 Flux 架构的概念，引发了很多的实现。2015 年，Redux 出现，将 Flux 与函数式编程结合一起，很短时间内就成为了最热门的前端架构。
 
 首先明确一点，Redux 是一个有用的架构，但不是非用不可。事实上，大多数情况，你可以不用它，只用 React 就够了。
-曾经有人说过这样一句话。
+
+曾经有人说过这样一句话：
+
 `"如果你不知道是否需要 Redux，那就是不需要它。"` —— Redux 的创造者 Dan Abramov
 
 > 简单说，如果你的 UI 层非常简单，没有很多互动，Redux 就是不必要的，用了反而增加复杂性。
@@ -195,7 +197,7 @@ store.dispatch()
 store.subscribe()
 ```
 
-i`mport { createStore } from 'redux';`
+`import { createStore } from 'redux';`
 `let { subscribe, dispatch, getState } = createStore(reducer);`
 createStore 方法还可以接受第二个参数，表示 State 的最初状态。这通常是服务器给出的。
 
@@ -275,13 +277,15 @@ store.subscribe(render)
 **先 download 莞式教程 https://github.com/Chad97/My-notes/tree/master/react-redux%E4%B9%8B%E6%B6%A8%E5%B7%A5%E8%B5%84**
 —— 看了它你就一目了然了
 
-> 这一章 我们简单的讲一下 react-redux ，就开始我的莞试教程
+> 这一章我们简单讲一下 react-redux，就开始我的莞式教程
 
-我们的 react-redux 为方便我们使用，内置了几个组件，非常简单，非常好用 —— `connect()` `mapStateToProps` `mapDispatchToProps` `<Provider></Provider>`
+- 首先通过 Provider 包裹根组件，让所有子组件都能访问到 store。
+- 接着在需要接收或触发状态的子组件里，用 `connect()` 把当前组件和 store 连接起来。
+- 通过 `mapStateToProps` 把数据（state）映射到组件的 props 里。
+- 通过 `mapDispatchToProps` 把 action 打包成可以触发的函数，也传入 props。
+- 最后，在组件内部调用 `this.props.xxx()` 就能触发状态变更，非常简单粗暴~
 
-- 好下面让我们来单刀直入~
-
-### reacr-redux 之涨工资
+### react-redux 之涨工资
 
 `npx redux-dom` 新建一个 react 项目 低版本 nodejs 用`create-app`也可以
 

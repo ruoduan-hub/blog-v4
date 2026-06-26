@@ -18,9 +18,11 @@ authors:
 
 ![th](/static/blog/reactHook-Typescript从入门到实践/th.jpeg)
 
-- ## 缘起
-      > 公司中台系统要新增公司项目 —— IM即时聊天 的后台管理，由本人全程负责，前端技术选型 想采用目前比较新比较hot的技术 —— reactHook + react-Router5 + Typescript + （mobx | useContext + useState）,
-  > 至于括号内的稍后解答，个人觉得可以一定程度上替代 mobx 和 redux 的状态管理
+### 缘起
+
+> 公司中台系统要新增公司项目 —— IM即时聊天的后台管理，由本人全程负责。
+> 前端技术选型想采用目前比较新比较 hot 的技术：reactHook + react-Router5 + Typescript + (mobx | useContext + useState)。
+> 至于括号内的稍后解答，个人觉得可以一定程度上替代 mobx 和 redux 的状态管理。
 
 * 本文将会从 Typescript，React-Hook，reactHook.TSX（实践）这三个方面来叙述
   - Typescript
@@ -144,7 +146,7 @@ jQuery("#foo")
 
 [antd 工程参考](https://ant.design/docs/react/use-in-typescript-cn)
 
-下面让我的步入重点～
+下面让我们步入重点～
 
 ## React-hook
 
@@ -285,17 +287,16 @@ lass Example extends React.Component {
 
 下面我们介绍用`useEffect`实现声明周期的 `componentDidMount` 和 `componentDidUpdate`
 
-首先在我们的函数组件中是可以定义多个 useState 和 useEffect 的 他们会依顺序执行的`
+首先，在函数组件中是可以定义多个 `useState` 和 `useEffect` 的，它们会依顺序执行。
 
-写在前面 useEffect 的返回值决定这个副作用的`类型`和销毁
+关于 `useEffect` 的返回值，它决定了这个副作用的"类型"和销毁方式：
 
-- return 函数：遇到清除的副作用
-  - return [] 空数组：只运行一次的 effect（仅在组件挂载和卸载时执行）
-  - 避免死循环
+- return 函数：表示此 effect 需要清除。React 会在组件卸载时执行这个清除函数。
+- return [] 空数组：只运行一次的 effect（仅在组件挂载和卸载时执行），可以有效避免死循环。
 
 ## useEffect === componentDidMount 🌰
 
-    // 例如我们要在页面挂载是时请求数据且渲染到页面上
+    // 例如我们要在页面挂载时请求数据并渲染到页面上
 
     ```js
     let [list, setList] = useEffect([])
@@ -347,7 +348,7 @@ lass Example extends React.Component {
 
 ````
 
-​ 到这里我们已经基本了解 reactHook 的基本使用。下面将介绍一个基于 ReactHook-useContext 来实现一个简单的 Redux 状态管理
+到这里我们已经基本了解了 reactHook 的使用。下面介绍一个基于 ReactHook `useContext` 来实现简单 Redux 状态管理的方案。
 
 ### Other ReactHook 实现 basic `Redux`
 
@@ -450,7 +451,7 @@ const Add_action = () => {
 
 [@ 参考文档](https://reactjs.org/docs/hooks-reference.html#usereducer)
 
-ps：以上就是`basic of redux`，但是在我的实际项目中使用的还是`mobx`，他的设计模式，和面向对象的写法也比较舒服. [可参考](https://mobx.js.org/README.html)
+ps：以上就是 basic redux 的实现。不过在实际项目中我用的还是 `mobx`，它的设计模式和面向对象的写法都比较舒服。[可参考](https://mobx.js.org/README.html)
 
 ---
 
@@ -482,10 +483,11 @@ SFC = Stateless Functional Component (已弃用)
 
 在有的时候你不加也没什么问题，建议是加上，这样方便告诉 Typescript 你的函数组件
 
-#### - jsDoc and interface
+#### - jsDoc 与 interface
 
-`jsDoc` 是一个插件 它用于在编辑器｜ IDE 中给 func 添加格式化的注释，
-在 Typescript 中我们使用强大的 vscode interface 是非常重要的，它用于描述我的接口，对象 ...
+`jsDoc` 是一个插件，用于在编辑器/IDE 中给函数添加格式化的注释。
+
+在 TypeScript 中 `interface` 非常重要，它用于描述接口、对象的数据结构。
 
 `这里我们要注意的是 jsDoc !== interface`
 
@@ -508,7 +510,7 @@ let _userList: object[] = []
 let [userList, setUserList] = useState(_userList)
 ```
 
-使用这 2 种方式都可以，但并不代编它们 `===`
+使用这两种方式都可以，但并不代表它们等价（`===`）。
 
 泛型 有着更为强大的用法
 
@@ -539,7 +541,7 @@ function getLength(something: string | number): number {
 
 #### - 插件
 
-使用 ESlite 来规范我们书写的代码
+使用 ESLint 来规范我们书写的代码
 
 - [AlloyTeam ESLint](https://github.com/AlloyTeam/eslint-config-alloy#typescript)
 - [参考](https://ts.xcatliu.com/engineering/lint#shi-yong-eslint-jian-cha-tsx-wen-jian)

@@ -18,13 +18,11 @@ authors:
 
 ### 缘起
 
-> 今天需要在 MAC 上安装一个 Windows 系统来使用一个软件，那 mac 上肯定首选`Parallels Desktop `
+> 今天需要在 Mac 上安装一个 Windows 系统来使用一个软件，那 Mac 上肯定首选 `Parallels Desktop`。
 >
-> 囊中羞涩，迫于无奈 只能选择 `学习版`来学习了. 找了一圈最新版各大`学习网站`都没有了 。
->
-> 找了个老版本 12版本的来使用
+> 囊中羞涩，迫于无奈只能选择 `学习版` 来学习了。找了一圈，最新版各大学习网站都没有了，于是找了个 12 版本的老版本来使用。
 
-ps: 幸好不是`M1`芯片，最近对M1 芯片非常反感，在ipad，mac中适配都不是很好，兼容性问题，闪退，层出不穷
+ps: 幸好不是 M1 芯片。最近对 M1 芯片非常反感，在 iPad、Mac 中适配都不是很好，兼容性问题、闪退层出不穷。
 
 
 
@@ -50,20 +48,12 @@ why join the navy if you can be a pirate ？
 
 ### 过程
 
-- 正常安装是无法安装的，—— “ Parallels Desktop”已损坏,无法打开。 您应该推出磁盘映像 “。
-- 首先要打开：设置 -> 安全与隐私 -> 允许从以下位置下载APP ： **选择任何来源**
-  - 没有的话 输入 `sudu spctl --master-disable` 
-- 然后按快捷键 shift + command + .  会看到安装包里隐藏的“Parallels Desktop.app”文件
-- Desktop.app 拖到桌面
-- `sudo xattr -r -d com.apple.quarantine ~/Desktop/Parallels\ Desktop.app`
-
-
-
-
-
-
-
-
+- 正常安装是无法安装的，提示：”Parallels Desktop”已损坏，无法打开。您应该退出磁盘映像。
+- 首先要打开：设置 -> 安全与隐私 -> 允许从以下位置下载 App：**选择任何来源**
+  - 没有的话输入 `sudo spctl --master-disable`
+- 然后按快捷键 shift + command + .，会看到安装包里隐藏的 “Parallels Desktop.app” 文件
+- 把 “Parallels Desktop.app” 拖到桌面
+- 执行：`sudo xattr -r -d com.apple.quarantine ~/Desktop/Parallels\ Desktop.app`
 
 
 

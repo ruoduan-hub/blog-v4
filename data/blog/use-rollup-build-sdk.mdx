@@ -15,16 +15,19 @@ authors:
 ---
 
 ### 缘起
-> 需要提供一个JavaScript的 SDK， 当然我们使用 `webpack`可也以构建；
-> ps(对于现代浏览器来说 webpack 打包体积 其实都不算事)
-> 主要是 `Rollup` 配置文件全面 ESM，配置简介，对于爱干净的我来说比较喜爱
+> 需要提供一个 JavaScript 的 SDK，当然我们使用 `webpack` 也可以构建。
+> （ps：对于现代浏览器来说 webpack 打包体积其实都不算事）
+> 主要是 `Rollup` 配置文件全面 ESM，配置简洁，对于爱干净的我来说比较喜爱。
 
 
 
 ![rollup.js logo](https://s2.loli.net/2022/06/22/W4yvPm5CFA3hMcX.jpg)
 
 ### Rollup
-> Rollup 是一个 JavaScript 模块打包器，可以将小块代码编译成大块复杂的代码，例如 library 或应用程序。Rollup 对代码模块使用新的标准化格式，这些标准都包含在 JavaScript 的 ES6 版本中，而不是以前的特殊解决方案，如 CommonJS 和 AMD。ES6 模块可以使你自由、无缝地使用你最喜爱的 library 中那些最有用独立函数，而你的项目不必携带其他未使用的代码。ES6 模块最终还是要由浏览器原生实现，但当前 Rollup 可以使你提前体验。
+> Rollup 是一个 JavaScript 模块打包器，可以将小块代码编译成大块复杂的代码，例如 library 或应用程序。
+> Rollup 对代码模块使用新的标准化格式，这些标准都包含在 JavaScript 的 ES6 版本中，而不是以前的特殊解决方案，如 CommonJS 和 AMD。
+> ES6 模块可以使你自由、无缝地使用你最喜爱的 library 中那些最有用的独立函数，而你的项目不必携带其他未使用的代码。
+> ES6 模块最终还是要由浏览器原生实现，但当前 Rollup 可以使你提前体验。
 
 > [link - Rollup](https://rollupjs.org/guide/en/#configuration-files)
 
@@ -37,7 +40,7 @@ authors:
 >  Flow 👇🏻
 
 1. 打包构建
-2. 加载 额外资源 （ resolve ）
+2. 加载额外资源（resolve）
 3. 转译 ES module
 4. Babel 
 5. 输出 压缩、移除 console 等
@@ -106,7 +109,7 @@ export default [
 
 #### external & resolve
 
-> 我们开发SDK的不可能全然自己 造轮子，也会使用其他一些依赖
+> 我们开发 SDK 不可能全然自己造轮子，也会使用其他一些依赖。
 
 
 
@@ -406,11 +409,11 @@ pubFunc()
 
 ### 发布
 
-- `yarn  adduser --registry http://xxx`
+- `yarn adduser --registry http://xxx`
 
-  or
+  或者
 
-- `yarn login login`
+- `yarn login`
 
 - `yarn publish`
 

@@ -75,7 +75,7 @@ new foo(); // undefined
 
 - 关于如何设置 this 有 4 条规则，上述代码中的最后 4 行展示了这 4 条规则
 
-1.  在非严格模式下，foo() 最后会将 this 设置为全局对象。在严格模式下，这是未定义的 行为，在访问 bar 属性时会出错——因此 "global" 是为 this.bar 创建的值。
+1. 在非严格模式下，`foo()` 最后会将 `this` 设置为全局对象。在严格模式下，这是未定义的行为，在访问 bar 属性时会出错 -- 因此 "global" 是为 `this.bar` 创建的值。
 
 2. obj1.foo() 将 this 设置为对象 obj1。
 3.   foo.call(obj2) 将 this 设置为对象 obj2。
@@ -95,7 +95,7 @@ new foo(); // undefined
 
 #### 非 JavaScript
 
-到目前为止，我们介绍的内容都局限于 JavaScript 语言本身。而现实情况是，大多数的 JavaScript 都是编写用于在浏览器这样的环境中运行并与之交互的。严格来说，你编写的 代码很大一部分并不直接由 JavaScript 控制。这听起来有点奇怪。
+到目前为止，我们介绍的内容都局限于 JavaScript 语言本身。而现实情况是，大多数的 JavaScript 都是编写用于在浏览器这样的环境中运行并与之交互的。严格来说，你编写的代码很大一部分并不直接由 JavaScript 控制 -- 这听起来有点奇怪。
 
 你将遇到的最常见的非 JavaScript 就是 DOM API。举例来说: 
 
