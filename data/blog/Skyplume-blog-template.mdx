@@ -1,0 +1,215 @@
+---
+title: 我开源了一个精致的 Next.js 博客模板：Skyplume
+date: '2026-06-29'
+tags:
+  - 开源
+  - Nextjs
+categories:
+  - 开源
+draft: false
+summary: >-
+  它内置 MDX 写作、SEO、RSS、sitemap、本地搜索、标签、暗色模式、Giscus 评论和静态导出。基础模板针对 Lighthouse 的 Performance、Best Practices、SEO 三项 100 分做了调优，项目已开源，支持一键部署到 Vercel。
+authors:
+  - default
+---
+
+# 我开源了一个精致的 Next.js 博客模板：Skyplume
+
+> **TL;DR**
+>
+> - Skyplume 是一个从真实生产个人博客中整理出来的 Next.js 15 博客模板。
+> - 它内置 MDX 写作、SEO、RSS、sitemap、本地搜索、标签、暗色模式、Giscus 评论和静态导出。
+> - 基础模板针对 Lighthouse 的 Performance、Best Practices、SEO 三项 100 分做了调优。
+> - 项目已开源，支持一键部署到 Vercel。
+
+![Skyplume 博客模板的社交分享图，展示了内容优先的开源博客模板定位](https://raw.githubusercontent.com/ruoduan-hub/next-blog-skyplume-template/master/public/static/images/skyplume-card.svg)
+
+最近我把自己的个人博客系统整理成了一个开源模板，名字叫 **Skyplume Blog Template**。
+
+它不是一个临时拼出来的 demo，而是从我自己的生产博客 [0x1ai.com](https://www.0x1ai.com/) 中抽离出来的。这个模板的目标很明确：给想认真写作、记录项目、发布工程笔记的人，一个干净、快速、可维护、SEO 基础完善的 Next.js 博客起点。
+
+项目地址：
+
+- GitHub：[next-blog-skyplume-template](https://github.com/ruoduan-hub/next-blog-skyplume-template)
+- 生产参考站点：[0x1ai.com](https://www.0x1ai.com/)
+- 一键部署到 Vercel：[Deploy Skyplume](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fruoduan-hub%2Fnext-blog-skyplume-template&project-name=skyplume-blog&repository-name=skyplume-blog)
+
+如果你正在找一个可以长期维护的个人博客模板，而不是只适合截图展示的 landing page，Skyplume 可能会比较适合你。
+
+## 为什么还要做一个博客模板？
+
+现在不缺博客模板，但很多模板有一个共同问题：第一眼挺好看，真正写几篇文章后就会发现维护成本很高。
+
+有的模板重视觉，文章页反而不够舒服；有的模板功能很多，但定制入口藏得很深；有的模板 SEO、RSS、sitemap、Open Graph、文章结构化数据都要自己补。对于一个主要目标是写作的人来说，这些事情会不断打断发布节奏。
+
+Skyplume 的取向比较克制：**先让内容好读，再谈装饰**。
+
+它的界面使用清晰的排版、安静的边框、轻量的动效和稳定的暗色模式。你可以把它当成一个已经搭好基础设施的个人发布系统，然后把精力放回到文章、项目和长期积累上。
+
+## 它长什么样？
+
+下面这张是模板首页截图。整体风格偏内容优先，不做过度装饰，但保留了足够的细节：清晰的导航、醒目的首屏文案、轻量统计卡片、文章列表、标签和稳定的留白节奏。
+
+![Skyplume 博客模板首页截图，展示了简洁导航、首屏介绍、文章列表和内容优先的排版风格](https://raw.githubusercontent.com/ruoduan-hub/next-blog-skyplume-template/master/intro/demo-blog.png)
+
+我希望它看起来不像一个“刚初始化出来的模板”，而是更接近一个可以直接开始长期写作的个人站点。
+
+## 内置了哪些功能？
+
+Skyplume 基于 **Next.js 15 App Router、React 19、TypeScript、Tailwind CSS 4 和 Contentlayer** 构建，写作方式以 MDX 为核心。
+
+目前内置的能力包括：
+
+- MDX 文章发布，支持 front matter、阅读时间、目录和自定义组件。
+- 代码高亮、数学公式、引用、提示块、图片、iframe。
+- 标签、分页、作者信息、项目页、关于页。
+- RSS、sitemap、robots、本地搜索索引。
+- SEO metadata、Open Graph、Twitter Cards、canonical URL。
+- 基于文章 front matter 生成 `BlogPosting` JSON-LD。
+- 暗色模式，支持跟随系统偏好。
+- 可选 Giscus 评论。
+- 轻量动效：路由过渡、首页渐入、文章列表显现、顶部进度条。
+- 安全相关 headers、静态资源缓存和静态导出支持。
+
+我尽量把“一个认真维护的个人博客会迟早需要的东西”提前放进去，但没有引入大型 CMS 或复杂后台。大多数配置都集中在普通的数据文件、MDX 文件和小型 React 组件里。
+
+## Lighthouse 表现
+
+基础模板针对 Lighthouse 做过调优，Performance、Best Practices、SEO 三项可以达到 100 分。实际部署后的分数仍然会受图片、统计脚本、评论系统和第三方资源影响，但模板本身不会从一开始拖后腿。
+
+![Skyplume 博客模板 Lighthouse 测试截图，Performance、Best Practices 和 SEO 三项均为 100 分](https://raw.githubusercontent.com/ruoduan-hub/next-blog-skyplume-template/master/intro/lighthouse.png)
+
+我比较在意这一点。博客不是只给作者看的，也不是只给搜索引擎看的。它应该在移动端打开得快，文章结构清楚，分享出去有正确的卡片，订阅源和站点地图也应该默认可用。
+
+## 适合谁使用？
+
+Skyplume 比较适合这些场景：
+
+- 想搭一个长期维护的个人技术博客。
+- 想写工程笔记、项目日志、开源记录或长篇文章。
+- 喜欢 Markdown/MDX 写作，不想接入复杂 CMS。
+- 希望站点默认有 SEO、RSS、sitemap 和本地搜索。
+- 想部署到 Vercel，也希望保留静态导出的可能。
+- 想从一个设计完成度较高的模板开始，而不是从空白页面慢慢补。
+
+它不太适合这些场景：
+
+- 你需要多人后台、权限管理、在线编辑器和完整 CMS 工作流。
+- 你想要的是视觉冲击很强的作品集首页，而不是内容优先的博客。
+- 你希望完全零代码定制所有页面。
+
+## 快速开始
+
+如果你想本地跑起来，只需要：
+
+```bash
+yarn install
+yarn dev
+```
+
+然后打开：
+
+```text
+http://localhost:3000
+```
+
+如果想直接部署，可以点这个按钮：
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fruoduan-hub%2Fnext-blog-skyplume-template&project-name=skyplume-blog&repository-name=skyplume-blog)
+
+第一次定制时，建议优先改这些文件：
+
+- `data/siteMetadata.js`：站点标题、URL、作者、GitHub、SEO 默认配置。
+- `data/profile.ts`：关于页资料、链接和技能展示。
+- `data/authors/default.mdx`：默认作者信息。
+- `data/headerNavLinks.ts`：顶部导航。
+- `data/projectsData.ts`：项目页内容。
+- `public/static/images/skyplume-card.svg`：社交分享图。
+- `public/static/favicons/favicon.svg`：favicon。
+
+## 写一篇文章是什么体验？
+
+文章放在 `data/blog` 目录下，用 MDX 写就可以。
+
+```mdx
+---
+title: My First Post
+date: '2026-01-01'
+tags:
+  - nextjs
+  - writing
+categories:
+  - notes
+draft: false
+summary: A short description for feeds, cards, and SEO.
+authors:
+  - default
+---
+
+Write your post in MDX.
+```
+
+文章图片建议放到：
+
+```text
+public/static/blog/<post-slug>
+```
+
+然后在 MDX 里这样引用：
+
+```md
+![Screenshot](/static/blog/my-first-post/screenshot.png)
+```
+
+这套流程比较接近我自己写博客的习惯：文件结构清楚，文章就是文章，图片就是图片，站点配置也都能在仓库里追踪。
+
+## 和普通 starter 有什么区别？
+
+我做 Skyplume 时，不想只做一个“能跑”的 starter，而是想做一个“能长期写”的模板。
+
+| 维度     | 常见 starter        | Skyplume                                                        |
+| -------- | ------------------- | --------------------------------------------------------------- |
+| 写作方式 | Markdown 或简单 MDX | MDX + front matter + 自定义组件                                 |
+| SEO      | 通常需要自己补      | metadata、OG、canonical、JSON-LD、sitemap、robots、RSS 默认包含 |
+| 内容发现 | 多数只给列表页      | 标签、分页、本地搜索、RSS                                       |
+| 设计取向 | 视觉差异较大        | 内容优先、克制排版、暗色模式稳定                                |
+| 部署     | 通常可部署          | 支持 Vercel 一键部署，也支持静态导出                            |
+| 可维护性 | 依赖具体模板实现    | 配置集中在数据文件和小组件中                                    |
+
+当然，它也不是完美的。我后续还想继续优化模板文档、补更多截图、整理主题定制指南，并收集真实用户基于 Skyplume 搭出来的网站。
+
+## 开源信息
+
+Skyplume 使用 MIT License 开源。
+
+如果你觉得这个模板对你有帮助，欢迎：
+
+- 给项目点一个 Star。
+- Fork 后改成自己的博客。
+- 提 issue 提建议。
+- 分享你用 Skyplume 搭出来的网站。
+- 帮忙推荐到 Vercel Templates 或其他开源模板集合。
+
+项目地址再放一次：
+
+[https://github.com/ruoduan-hub/next-blog-skyplume-template](https://github.com/ruoduan-hub/next-blog-skyplume-template)
+
+也欢迎直接体验生产参考站点：
+
+[https://www.0x1ai.com/](https://www.0x1ai.com/)
+
+## 结语
+
+我一直觉得，个人博客最重要的不是“看起来像一个产品官网”，而是能不能让人持续写下去。
+
+Skyplume 的目标也是这样：它不试图替你决定内容，也不把站点配置藏在复杂系统里。它只是把一个现代个人博客需要的基础设施提前打好，让你可以更快开始写作、更稳定地维护、更自然地积累自己的内容资产。
+
+如果你正在准备重做自己的博客，或者想给项目、工程笔记、开源记录找一个干净的发布入口，可以试试 Skyplume。
+
+---
+
+发布到中文社区时，如果平台不显示 GitHub raw 图片，可以手动上传这几张图：
+
+- `public/static/images/skyplume-card.svg`
+- `intro/demo-blog.png`
+- `intro/lighthouse.png`
