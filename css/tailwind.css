@@ -14,30 +14,30 @@
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
   /* Colors */
-  /* Copied from https://tailwindcss.com/docs/theme#default-theme-variable-reference */
-  --color-primary-50: oklch(0.971 0.014 343.198);
-  --color-primary-100: oklch(0.948 0.028 342.258);
-  --color-primary-200: oklch(0.899 0.061 343.231);
-  --color-primary-300: oklch(0.823 0.12 346.018);
-  --color-primary-400: oklch(0.718 0.202 349.761);
-  --color-primary-500: oklch(0.656 0.241 354.308);
-  --color-primary-600: oklch(0.592 0.249 0.584);
-  --color-primary-700: oklch(0.525 0.223 3.958);
-  --color-primary-800: oklch(0.459 0.187 3.815);
-  --color-primary-900: oklch(0.408 0.153 2.432);
-  --color-primary-950: oklch(0.284 0.109 3.907);
+  /* Mineral Teal: calm lab-grade accent with teal-tinted neutrals for long-form reading. */
+  --color-primary-50: oklch(0.972 0.012 180);
+  --color-primary-100: oklch(0.94 0.026 180);
+  --color-primary-200: oklch(0.89 0.052 180);
+  --color-primary-300: oklch(0.81 0.088 180);
+  --color-primary-400: oklch(0.69 0.115 179);
+  --color-primary-500: oklch(0.56 0.12 178);
+  --color-primary-600: oklch(0.49 0.112 178);
+  --color-primary-700: oklch(0.42 0.095 180);
+  --color-primary-800: oklch(0.35 0.075 182);
+  --color-primary-900: oklch(0.29 0.058 184);
+  --color-primary-950: oklch(0.22 0.045 186);
 
-  --color-gray-50: oklch(0.985 0.002 247.839);
-  --color-gray-100: oklch(0.967 0.003 264.542);
-  --color-gray-200: oklch(0.928 0.006 264.531);
-  --color-gray-300: oklch(0.872 0.01 258.338);
-  --color-gray-400: oklch(0.707 0.022 261.325);
-  --color-gray-500: oklch(0.551 0.027 264.364);
-  --color-gray-600: oklch(0.446 0.03 256.802);
-  --color-gray-700: oklch(0.373 0.034 259.733);
-  --color-gray-800: oklch(0.278 0.033 256.848);
-  --color-gray-900: oklch(0.21 0.034 264.665);
-  --color-gray-950: oklch(0.13 0.028 261.692);
+  --color-gray-50: oklch(0.985 0.004 190);
+  --color-gray-100: oklch(0.965 0.006 190);
+  --color-gray-200: oklch(0.925 0.008 190);
+  --color-gray-300: oklch(0.865 0.01 190);
+  --color-gray-400: oklch(0.695 0.014 190);
+  --color-gray-500: oklch(0.545 0.016 190);
+  --color-gray-600: oklch(0.44 0.016 190);
+  --color-gray-700: oklch(0.365 0.016 190);
+  --color-gray-800: oklch(0.285 0.015 190);
+  --color-gray-900: oklch(0.205 0.014 190);
+  --color-gray-950: oklch(0.13 0.012 190);
 
   /* Line heights */
   --line-height-11: 2.75rem;
@@ -111,7 +111,7 @@
   --tw-prose-quotes: oklch(0.38 0.005 260);
   --tw-prose-quote-borders: oklch(0.85 0.008 260);
   --tw-prose-captions: oklch(0.5 0.005 260);
-  --tw-prose-code: oklch(0.42 0.03 350);
+  --tw-prose-code: var(--color-primary-700);
   --tw-prose-pre-code: oklch(0.3 0.005 260);
   --tw-prose-pre-bg: oklch(0.97 0.002 260);
   --tw-prose-th-borders: oklch(0.85 0.005 260);
@@ -192,8 +192,8 @@
   }
 
   & :where(code):not(pre code) {
-    color: oklch(0.42 0.03 350);
-    background: oklch(0.96 0.005 350 / 0.6);
+    color: var(--color-primary-700);
+    background: oklch(0.96 0.012 180 / 0.65);
     padding: 0.125rem 0.375rem;
     border-radius: 0.25rem;
     font-size: 0.875em;
@@ -240,22 +240,27 @@
    * All headings share the same bright white.
    * Size/weight differentiate hierarchy, not color.
    */
-  & h1, & h2, & h3, & h4, & h5, & h6 {
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
     color: oklch(0.95 0 0) !important;
   }
 
   /*
    * ── Links ──
-   * Rose accent. The primary palette's 400 step pops on dark bg.
+   * Mineral teal accent. The primary palette's 400 step pops on dark bg.
    */
   & a {
-    color: oklch(0.79 0.15 0) !important;
+    color: var(--color-primary-400) !important;
     font-weight: 400;
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: color 0.3s cubic-bezier(0.32, 0.72, 0, 1);
     &:hover {
-      color: oklch(0.85 0.12 10) !important;
+      color: var(--color-primary-300) !important;
     }
   }
 
@@ -263,7 +268,8 @@
    * ── Bold / strong ──
    * Slightly brighter than body for scannable emphasis.
    */
-  & strong, & b {
+  & strong,
+  & b {
     color: oklch(0.93 0 0) !important;
     font-weight: 600;
   }
@@ -287,13 +293,13 @@
    * Soft contrast — not "white on black".
    */
   & :where(code):not(pre code) {
-    color: oklch(0.9 0.05 35) !important;
-    background: oklch(0.3 0.015 30 / 0.35) !important;
+    color: var(--color-primary-200) !important;
+    background: oklch(0.24 0.025 184 / 0.42) !important;
     padding: 0.15rem 0.4rem;
     border-radius: 0.25rem;
     font-size: 0.875em;
     font-weight: 500;
-    border: 1px solid oklch(0.35 0.015 30 / 0.25);
+    border: 1px solid oklch(0.42 0.06 180 / 0.3);
   }
 
   /*
@@ -465,64 +471,64 @@ input:-webkit-autofill:focus {
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: var(--color-primary-600);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --secondary: var(--color-gray-100);
+  --secondary-foreground: var(--color-gray-900);
+  --muted: var(--color-gray-100);
+  --muted-foreground: var(--color-gray-500);
+  --accent: var(--color-primary-50);
+  --accent-foreground: var(--color-primary-800);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: var(--color-gray-200);
+  --input: var(--color-gray-200);
+  --ring: var(--color-primary-500);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar: var(--color-gray-50);
+  --sidebar-foreground: var(--color-gray-950);
+  --sidebar-primary: var(--color-primary-600);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-accent: var(--color-primary-50);
+  --sidebar-accent-foreground: var(--color-primary-800);
+  --sidebar-border: var(--color-gray-200);
+  --sidebar-ring: var(--color-primary-500);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: var(--color-gray-950);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: var(--color-gray-900);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: var(--color-gray-900);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  --primary: var(--color-primary-400);
+  --primary-foreground: var(--color-gray-950);
+  --secondary: var(--color-gray-800);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
+  --muted: var(--color-gray-800);
+  --muted-foreground: var(--color-gray-400);
+  --accent: var(--color-primary-950);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: var(--color-primary-400);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: var(--color-gray-900);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary: var(--color-primary-400);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent: var(--color-gray-800);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: var(--color-primary-400);
 }
