@@ -1,6 +1,12 @@
-# Ruoduan Blog
+# Chad Lab 
 
 若端的个人博客，基于 Next.js、TypeScript、Contentlayer、Tailwind CSS 和 shadcn/ui 构建。
+
+本项目基于 [next-blog-skyplume-template](https://github.com/ruoduan-hub/next-blog-skyplume-template) 模板构建。
+
+This project is built on the [next-blog-skyplume-template](https://github.com/ruoduan-hub/next-blog-skyplume-template) template.
+
+このプロジェクトは [next-blog-skyplume-template](https://github.com/ruoduan-hub/next-blog-skyplume-template) テンプレートを基に構築されています。
 
 ## 内容
 
