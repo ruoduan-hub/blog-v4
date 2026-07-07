@@ -1,0 +1,407 @@
+---
+title: Next.js Inline Script 使用场景与替代方案
+date: '2026-07-05'
+tags:
+  - Nextjs
+  - React
+  - 前端
+categories:
+  - 前端
+draft: false
+summary: >-
+  Next.js Inline Script 适合短小、页面级、初始化性质的脚本，但不适合承载复杂业务逻辑。本文对比 Inline Script、客户端组件 + useEffect、Zustand persist、Middleware / Proxy，帮助你在首屏修正、状态持久化和请求前判断之间做出更稳的选择。
+authors:
+  - default
+---
+
+# Next.js Inline Script 使用场景与替代方案
+
+> **TL;DR**
+>
+> - Inline Script 适合 5 到 20 行以内的页面初始化脚本，例如第三方配置片段和首屏小修正。
+> - 客户端组件 + `useEffect` 更适合可维护的浏览器交互逻辑。
+> - Zustand `persist` 更适合跨页面状态持久化，但不要保存敏感信息。
+> - Middleware / Proxy 适合请求进入页面前的重定向、鉴权、分流和 Cookie 处理。
+> - JSON-LD 不是可执行脚本，推荐使用原生 `<script type="application/ld+json">`。
+
+在 Next.js 项目里，脚本处理不只是把 `<script>` 放到页面里。Next.js 提供了 `next/script`，让开发者可以控制脚本加载策略、执行时机和第三方脚本的影响范围。
+
+Inline Script 的关键问题也不是“能不能写”，而是“这个逻辑是否真的应该以内联脚本的形式存在”。如果代码开始涉及 React 状态、跨页面持久化、鉴权或请求前判断，就应该把它和 Client Component、Zustand、Middleware / Proxy 放在一起比较。
+
+## 什么是 Next.js Inline Script？
+
+Next.js Inline Script 是写在 `next/script` 组件内部的 JavaScript，而不是通过 `src` 加载外部文件。它适合很短、一次性、页面级的初始化代码。Next.js 官方文档要求内联 `Script` 必须提供 `id`，否则框架无法稳定追踪这段脚本。
+
+最基础的写法：
+
+```tsx
+import Script from 'next/script'
+
+export default function Page() {
+  return (
+    <Script id="show-banner">
+      {`document.getElementById('banner')?.classList.remove('hidden')`}
+    </Script>
+  )
+}
+```
+
+也可以使用 `dangerouslySetInnerHTML`：
+
+```tsx
+import Script from 'next/script'
+
+export default function Page() {
+  return (
+    <Script
+      id="show-banner"
+      dangerouslySetInnerHTML={{
+        __html: `
+          document.getElementById('banner')?.classList.remove('hidden')
+        `,
+      }}
+    />
+  )
+}
+```
+
+第二种方式更接近原生脚本注入，也更需要谨慎。只要脚本内容中混入用户输入，就可能变成 XSS 风险。生产代码里，内联脚本内容最好来自静态常量或可信配置。
+
+## Inline Script 适合哪些场景？
+
+Inline Script 适合“小、早、局部”的脚本逻辑。它通常只服务一个页面或一个 layout，不需要复用，不依赖复杂状态，也不值得拆成单独模块。如果一段脚本需要测试、复用、异步状态或多人维护，Inline Script 就不是首选。
+
+常见场景有四类。
+
+### 首屏状态修正
+
+有些 UI 状态需要尽早恢复，例如主题、折叠状态、一次性提示条。它们可能只需要读取一个 `localStorage` 值，然后给 DOM 加一个 class。
+
+```tsx
+<Script id="restore-banner-state" strategy="afterInteractive">
+  {`
+    if (localStorage.getItem('showBanner') === '1') {
+      document.getElementById('banner')?.classList.remove('hidden')
+    }
+  `}
+</Script>
+```
+
+这类脚本的目标是减少首屏闪烁，不是承载完整业务流程。如果后续要处理按钮点击、状态同步、表单提交，就应该迁移到客户端组件。
+
+### 第三方工具初始化
+
+分析、客服、A/B 测试和广告工具经常要求插入一段初始化代码。外部 SDK 可以用 `src` 加载，少量配置可以放在 Inline Script 中。
+
+```tsx
+<Script
+  id="analytics-init"
+  strategy="afterInteractive"
+  dangerouslySetInnerHTML={{
+    __html: `
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({ event: 'page_ready' })
+    `,
+  }}
+/>
+```
+
+这里要守住两条底线：不要在前端硬编码密钥，不要把用户输入拼到脚本字符串里。
+
+### 旧内容或第三方 HTML 的轻量补丁
+
+迁移旧系统、嵌入 CMS 内容或接入第三方 HTML 时，页面里可能存在一小段非 React 控制的 DOM。此时可以用 Inline Script 做局部兼容。
+
+```tsx
+<Script id="legacy-table-patch" strategy="afterInteractive">
+  {`
+    document
+      .querySelectorAll('.legacy-content table')
+      .forEach((table) => table.parentElement?.classList.add('table-wrap'))
+  `}
+</Script>
+```
+
+这种补丁要有明确边界。只要逻辑开始膨胀，就应该改成独立组件或迁移数据结构。
+
+### 供应商要求的固定代码片段
+
+有些平台只提供复制粘贴式代码片段。可以先用 `Script` 包一层，但要优先检查是否存在官方 React 或 Next.js SDK。
+
+如果有官方集成包，优先使用集成包。Inline Script 更像兜底方案，不应该成为长期主要入口。
+
+## 应该选择哪种 Script strategy？
+
+`next/script` 的加载策略决定脚本什么时候进入页面。大多数 Inline Script 从 `afterInteractive` 开始即可。只有脚本必须在页面 hydration 前运行时，才考虑 `beforeInteractive`。
+
+| strategy | 适合场景 | 注意事项 |
+| --- | --- | --- |
+| `beforeInteractive` | Bot 检测、Cookie consent、关键全站脚本 | App Router 中通常放在根 layout，谨慎使用 |
+| `afterInteractive` | 分析脚本、一般初始化逻辑、第三方配置 | 默认策略，适合多数场景 |
+| `lazyOnload` | 聊天插件、社交组件、低优先级脚本 | 不适合首屏依赖 |
+| `worker` | 尝试把脚本放到 Web Worker | 实验特性，使用前确认项目支持情况 |
+
+不要为了“更早执行”滥用 `beforeInteractive`。执行越早，越容易影响首屏性能，也越容易和 hydration 时序产生冲突。
+
+## Inline Script 和其他方案怎么选？
+
+这几种方案的边界很清楚：Inline Script 解决“很早执行的一小段浏览器脚本”；`useEffect` 解决“组件和外部系统同步”；Zustand `persist` 解决“状态跨页面持久化”；Middleware / Proxy 解决“请求进入页面前的服务端判断”。
+
+| 方案 | 执行位置 | 最适合 | 不适合 | 主要风险 |
+| --- | --- | --- | --- | --- |
+| Inline Script | 浏览器脚本加载阶段 | 短小初始化、第三方片段、首屏小修正 | 复杂交互、复用逻辑、异步业务流程 | XSS、CSP、难测试 |
+| 客户端组件 + `useEffect` | 浏览器，组件挂载后 | DOM 订阅、浏览器 API、第三方 SDK 接入 | 页面渲染前必须完成的判断 | 执行偏晚，可能闪烁 |
+| Zustand + `persist` | 浏览器状态层 | 主题、偏好设置、草稿、跨页面状态 | 鉴权、敏感数据、服务端首屏强依赖 | 本地存储泄露、hydration 差异 |
+| Middleware / Proxy | 服务端，请求完成前 | 鉴权、重定向、A/B 分流、Cookie 判断 | 操作 DOM、读取 `localStorage` | 运行环境限制、缓存复杂度 |
+
+### 客户端组件 + useEffect：可维护的浏览器逻辑
+
+React 官方文档把 `useEffect` 定义为让组件和外部系统同步的 Hook。它只在客户端执行，适合访问 `window`、`document`、`localStorage`、事件监听器和浏览器 SDK。
+
+```tsx
+'use client'
+
+import { useEffect, useState } from 'react'
+
+export function ThemeBootstrap() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme')
+
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      setTheme(savedTheme)
+      document.documentElement.dataset.theme = savedTheme
+    }
+  }, [])
+
+  return null
+}
+```
+
+这比 Inline Script 更容易维护，因为逻辑仍然在 TypeScript 和 React 组件边界里。它能拆成 Hook，也能和组件状态自然配合。
+
+它的问题是执行时机偏晚。如果这段逻辑会影响首屏颜色、语言、布局方向，就可能出现短暂闪烁。此时可以用 Cookie 让服务端提前知道状态，或者用极短的 Inline Script 做首屏兜底。
+
+### Zustand persist：跨页面状态持久化
+
+当状态被多个组件或页面共享时，不要继续把逻辑塞进 Inline Script。Zustand 的 `persist` 中间件可以把指定状态保存到 storage 中，适合主题、侧边栏折叠、草稿和筛选条件。
+
+```ts
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+type PreferenceState = {
+  theme: 'light' | 'dark'
+  setTheme: (theme: 'light' | 'dark') => void
+}
+
+export const usePreferenceStore = create<PreferenceState>()(
+  persist(
+    (set) => ({
+      theme: 'light',
+      setTheme: (theme) => set({ theme }),
+    }),
+    {
+      name: 'preference-storage',
+      partialize: (state) => ({ theme: state.theme }),
+    }
+  )
+)
+```
+
+这种方式的优点是状态读写集中，组件不用关心底层存储。但它不是安全存储方案。不要把 token、权限、支付信息、个人敏感信息放进持久化 store。
+
+在 SSR 场景下，还要注意 hydration 差异。服务端先输出默认状态，客户端恢复本地状态后 UI 变化，可能导致短暂不一致。对首屏强相关的状态，Cookie 往往比 `localStorage` 更适合做初始来源。
+
+### Middleware 或 Proxy：请求进入页面前的判断
+
+如果需求发生在“用户看到页面之前”，就应该考虑 Middleware 或 Proxy。Next.js 新文档中，`middleware` 文件约定正在向 `proxy` 迁移；旧项目常见 `middleware.ts`，新项目可以关注 `proxy.ts`。
+
+它适合处理这些事情：
+
+- 未登录用户重定向到登录页。
+- 根据 Cookie 判断实验分组。
+- 根据路径、地区、设备信息改写请求。
+- 设置请求头、响应头或 Cookie。
+
+示例：
+
+```ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function proxy(request: NextRequest) {
+  const theme = request.cookies.get('theme')?.value
+  const response = NextResponse.next()
+
+  if (theme === 'dark' || theme === 'light') {
+    response.headers.set('x-user-theme', theme)
+  }
+
+  return response
+}
+
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+}
+```
+
+这类逻辑运行在请求阶段，不能读取 `localStorage`，也不能操作 DOM。它的优势是足够早，能影响重定向、rewrite、headers 和 Cookie。代价是缓存策略更复杂，部分逻辑还会受运行环境限制。
+
+## 一个实用的选型顺序
+
+遇到“页面加载时根据用户偏好做处理”的需求，可以按这个顺序判断。先问执行时机，再问状态归属，最后问安全边界。
+
+1. **只是 5 到 20 行首屏兜底逻辑**：用 Inline Script。
+2. **逻辑属于某个组件生命周期**：用客户端组件 + `useEffect`。
+3. **状态需要跨页面共享并持久化**：用 Zustand + `persist`。
+4. **必须在页面渲染前完成判断**：用 Middleware / Proxy，状态尽量放 Cookie。
+5. **既要首屏无闪烁，又要客户端可维护**：服务端用 Cookie 决定初始状态，客户端用 Zustand 或组件状态接管后续更新。
+
+以主题切换为例，一个稳定方案通常是组合式的：用户点击切换时更新 Zustand store，同时写入 Cookie；下一次请求由服务端读取 Cookie，提前输出正确主题；如果仍存在极短视觉窗口，再用 Inline Script 做兜底。
+
+## JSON-LD 应该用 Inline Script 吗？
+
+JSON-LD 虽然也写在 `<script>` 标签里，但它不是可执行 JavaScript，而是结构化数据。Next.js 官方文档建议在 `layout` 或 `page` 中渲染原生 `<script type="application/ld+json">`。
+
+```tsx
+export default async function ProductPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Next.js Course',
+    description: 'A course about production Next.js applications',
+  }
+
+  return (
+    <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+    </section>
+  )
+}
+```
+
+这里的关键点是转义 `<`。`JSON.stringify` 不等于安全序列化，如果结构化数据中包含用户可控内容，要额外处理注入风险。
+
+## 启用 CSP 后要注意什么？
+
+严格的 Content Security Policy 会直接影响 Inline Script。CSP 可以禁止内联脚本执行，常见解决方式是给脚本提供 `nonce`。
+
+```tsx
+import { headers } from 'next/headers'
+import Script from 'next/script'
+
+export default async function Page() {
+  const nonce = (await headers()).get('x-nonce')
+
+  return (
+    <Script
+      id="analytics-init"
+      nonce={nonce ?? undefined}
+      strategy="afterInteractive"
+    >
+      {`
+        window.dataLayer = window.dataLayer || []
+      `}
+    </Script>
+  )
+}
+```
+
+但 nonce 不是免费能力。它通常依赖每次请求的 header，静态页面在构建时拿不到请求级 nonce。这会影响静态优化、ISR、CDN 缓存和部分预渲染能力。
+
+安全要求明确时可以使用 nonce。普通内容站点更应该优先减少 Inline Script 数量，而不是把所有页面都切成动态渲染。
+
+## 什么时候不应该使用 Inline Script？
+
+只要脚本开始变成业务逻辑，就不应该继续使用 Inline Script。典型信号包括：依赖多个变量、操作多个 DOM 节点、请求接口、拼接用户输入、管理全局状态、需要复用或需要测试。
+
+避免这种写法：
+
+```tsx
+<Script id="checkout-hack">
+  {`
+    // 大量业务逻辑
+    // 多个 DOM 查询
+    // 请求接口
+    // 拼接用户输入
+    // 修改全局状态
+  `}
+</Script>
+```
+
+更好的方向是把交互逻辑放进客户端组件：
+
+```tsx
+'use client'
+
+import { useEffect } from 'react'
+
+export function CheckoutEnhancer() {
+  useEffect(() => {
+    // 可测试、可拆分、可类型化的客户端逻辑
+  }, [])
+
+  return null
+}
+```
+
+Inline Script 应该像页面级配置片段，而不是绕开 React 和 TypeScript 的后门。
+
+## 实战决策清单
+
+写 Inline Script 前，先用这几个问题过一遍：
+
+- 这段脚本是否少于 20 行？
+- 是否只服务当前页面或当前 layout？
+- 是否不包含用户输入拼接？
+- 是否不需要单元测试？
+- 是否不能自然写成客户端组件？
+- 是否不需要 Zustand 这类状态层表达持久化状态？
+- 是否不需要 Middleware / Proxy 在请求阶段提前处理？
+- 是否已经明确选择了合适的 `strategy`？
+
+如果多个答案是否定的，就不要先写 Inline Script。优先考虑组件化、状态层或服务端请求阶段的方案。
+
+## 常见问题
+
+### Inline Script 会不会影响性能？
+
+会，尤其是放在过早的执行阶段时。短小脚本影响通常有限，但第三方脚本、同步 DOM 操作和 `beforeInteractive` 都可能影响首屏。默认从 `afterInteractive` 开始，只有关键脚本才提前。
+
+### 主题切换应该用 Inline Script 还是 Zustand？
+
+主题切换通常适合组合方案。Zustand 管理客户端状态，`persist` 保存用户偏好，Cookie 给服务端提供初始状态。Inline Script 只适合作为防闪烁兜底，不适合作为完整主题系统。
+
+### 为什么不用 localStorage 直接解决所有持久化？
+
+`localStorage` 只能在浏览器读取，服务端渲染阶段拿不到。它也不是安全存储边界。对首屏展示有影响的状态，最好同步到 Cookie；对纯客户端偏好，`localStorage` 或 Zustand `persist` 更合适。
+
+### Middleware 能替代 Inline Script 吗？
+
+不能完全替代。Middleware / Proxy 运行在服务端请求阶段，适合重定向、鉴权、分流和 Cookie 判断。Inline Script 运行在浏览器，适合 DOM 或浏览器 API 相关逻辑。两者解决的是不同层的问题。
+
+## 参考资料
+
+- [Next.js Script API Reference](https://nextjs.org/docs/app/api-reference/components/script)
+- [Next.js Scripts Guide](https://nextjs.org/docs/app/guides/scripts)
+- [Next.js JSON-LD Guide](https://nextjs.org/docs/app/guides/json-ld)
+- [Next.js Content Security Policy Guide](https://nextjs.org/docs/app/guides/content-security-policy)
+- [Next.js Inline Script Id Error](https://nextjs.org/docs/messages/inline-script-id)
+- [Next.js Proxy File Convention](https://nextjs.org/docs/app/api-reference/file-conventions/proxy)
+- [React useEffect Reference](https://react.dev/reference/react/useEffect)
+- [Zustand Persist Middleware](https://zustand.docs.pmnd.rs/reference/middlewares/persist)
+
+## 结论
+
+Next.js Inline Script 是一个有用但应该克制使用的工具。它适合短小、页面级、初始化性质的脚本，尤其是第三方平台要求的小片段、首屏状态修正和少量 DOM 补丁。
+
+生产项目里可以按这条线判断：浏览器早期小脚本用 Inline Script，组件生命周期逻辑用 `useEffect`，跨页面持久化状态用 Zustand `persist`，请求前判断用 Middleware / Proxy。
+
+把 Inline Script 当成精准工具，不要当成通用脚本入口。这样既能保留 Next.js 的脚本优化能力，也能降低安全、性能和维护成本。
