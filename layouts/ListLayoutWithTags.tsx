@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { slug } from 'github-slugger'
 import { formatDate } from '@/lib/content/format-date.mjs'
+import { normalizeTagParam } from '@/lib/content/tag-routes.mjs'
 import { CoreContent } from '@/lib/content/types'
 import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
@@ -74,6 +75,7 @@ export default function ListLayoutWithTags({
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
+  const currentTag = normalizeTagParam(pathname.split('/tags/')[1]?.split('/')[0] ?? '')
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
@@ -102,7 +104,7 @@ export default function ListLayoutWithTags({
                 {sortedTags.map((t) => {
                   return (
                     <li key={t} className="my-3">
-                      {decodeURI(pathname.split('/tags/')[1]) === slug(t) ? (
+                      {currentTag === slug(t) ? (
                         <h3 className="text-primary-500 inline px-3 py-2 text-sm font-bold uppercase">
                           {`${t} (${tagCounts[t]})`}
                         </h3>
