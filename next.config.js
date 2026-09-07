@@ -96,6 +96,15 @@ module.exports = () => {
             },
           ],
         },
+        {
+          source: '/:path*',
+          headers: [
+            {
+              key: 'Referrer-Policy',
+              value: 'no-referrer',
+            },
+          ],
+        },
       ]
     },
     webpack: (config, options) => {
